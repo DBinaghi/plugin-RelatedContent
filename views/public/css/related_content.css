@@ -1,0 +1,12 @@
+#related_content {
+	margin-top: 1em; 
+	margin-bottom: 1em; 
+	padding: 10px; 
+	color: black;
+	background-color: #eeeeee; 
+	overflow:auto;
+}
+
+#related_content .image {
+	margin: 5px;
+}
