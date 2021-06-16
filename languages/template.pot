@@ -10,65 +10,65 @@ msgstr ""
 "POT-Creation-Date: 2021-06-16 6:49-0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Daniele BINAGHI <admin@bitoteko.it>\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: it\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: RelatedContentPlugin.php:162
 msgid "Related items you might want to check out"
-msgstr "Documenti correlati che potresti voler controllare"
+msgstr ""
 
 #: config_form.php:5
 msgid "General settings"
-msgstr "Impostazioni generali"
+msgstr ""
 
 #: config_form.php:9
 msgid "Items Limit"
-msgstr "Limite documenti"
+msgstr ""
 
 #: config_form.php:13
 msgid "The maximum amount of related Items to be suggested (default: 6)."
-msgstr "Il numero massimo di documenti correlati da suggerire (predefinito: 6)."
+msgstr ""
 
 #: config_form.php:21
 msgid "Use Square Thumbnails"
-msgstr "Usa miniature quadrate"
+msgstr ""
 
 #: config_form.php:25
 msgid "If checked, cropped square thumbnails are displayed."
-msgstr "Se selezionata, verranno mostrate miniature squadrate."
+msgstr ""
 
 #: config_form.php:33
 msgid "Use Short Date"
-msgstr "Usa data corta"
+msgstr ""
 
 #: config_form.php:37
 msgid "If checked, just the year (first 4 digits) will be considered for Date similarity."
-msgstr "Se selezionata, solo l'anno (le prime 4 cifre) verrà considerato per la similarità per Data."
+msgstr ""
 
 #: config_form.php:51
 msgid "The relative weight of similarity by Subject (if blank, will not be considered)."
-msgstr "Il peso relativo della similarità per Soggetto (se vuoto, non sarà considerato)."
+msgstr ""
 
 #: config_form.php:63
 msgid "The relative weight of similarity by Tag (if blank, will not be considered)."
-msgstr "Il peso relativo della similarità per Etichetta (se vuoto, non sarà considerato)."
+msgstr ""
 
 #: config_form.php:75
 msgid "The relative weight of similarity by Date (if blank, will not be considered)."
-msgstr "Il peso relativo della similarità per Data (se vuoto, non sarà considerato)."
+msgstr ""
 
 #: config_form.php:87
 msgid "The relative weight of similarity by Creator (if blank, will not be considered)."
-msgstr "Il peso relativo della similarità per Autore (se vuoto, non sarà considerato)."
+msgstr ""
 
 #: config_form.php:99
 msgid "The relative weight of similarity by Contributor (if blank, will not be considered)."
-msgstr "Il peso relativo della similarità per Autore di Contributo Subordinato (se vuoto, non sarà considerato)."
+msgstr ""
 
 #: config_form.php:111
 msgid "The relative weight of similarity by Type (if blank, will not be considered)."
-msgstr "Il peso relativo della similarità per Tipologia (se vuoto, non sarà considerato)."
+msgstr ""
