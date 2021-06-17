@@ -169,7 +169,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 
 			// displays thumbnails
 			echo "<div id='related_content'>\n";
-			echo "<h3><strong>" . __('Related items you might want to check out') . "...</strong></h3>";
+			echo "<h3><strong>" . __('Related Items you might want to check out') . "...</strong></h3>";
 
 			foreach ($results as $key => $value) {
 				$item = get_record_by_id('Item', $key);
