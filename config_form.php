@@ -1,8 +1,17 @@
 <?php	
 	$view = get_view();
 ?>
-
-<h2><?php echo __('General settings'); ?></h2>
+<style type = "text/css">
+	.boxes, .boxes-left {
+		vertical-align: middle;
+	}
+	.boxes {
+		text-align: center;
+	}
+	.boxes input {
+		margin-bottom: 0;
+	}
+</style>
 
 <div class="field">
 	<div class="two columns alpha">
@@ -40,76 +49,33 @@
 	</div>
 </div>
 
-<h2><?php echo __('Weights'); ?></h2>
-
 <div class="field">
 	<div class="two columns alpha">
-		<?php echo $view->formLabel('related_content_weight_subject', __('Subject')); ?>
+		<?php echo $view->formLabel('related_content-weights', __('Weights')); ?>
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The relative weight of similarity by Subject (if blank, will not be considered).'); ?>
+			<?php echo __('The search criterias\'s relative weights (if blank, criteria will not be considered).'); ?>
 		</p>
-		<?php echo $view->formText('related_content_weight_subject', get_option('related_content_weight_subject')); ?>
-	</div>
-</div>
-
-<div class="field">
-	<div class="two columns alpha">
-		<?php echo $view->formLabel('related_content_weight_tags', __('Tags')); ?>
-	</div>
-	<div class="inputs five columns omega">
-		<p class="explanation">
-			<?php echo __('The relative weight of similarity by Tag (if blank, will not be considered).'); ?>
-		</p>
-		<?php echo $view->formText('related_content_weight_tags', get_option('related_content_weight_tags')); ?>
-	</div>
-</div>
-
-<div class="field">
-	<div class="two columns alpha">
-		<?php echo $view->formLabel('related_content_weight_date', __('Date')); ?>
-	</div>
-	<div class="inputs five columns omega">
-		<p class="explanation">
-			<?php echo __('The relative weight of similarity by Date (if blank, will not be considered).'); ?>
-		</p>
-		<?php echo $view->formText('related_content_weight_date', get_option('related_content_weight_date')); ?>
-	</div>
-</div>
-
-<div class="field">
-	<div class="two columns alpha">
-		<?php echo $view->formLabel('related_content_weight_creator', __('Creator')); ?>
-	</div>
-	<div class="inputs five columns omega">
-		<p class="explanation">
-			<?php echo __('The relative weight of similarity by Creator (if blank, will not be considered).'); ?>
-		</p>
-		<?php echo $view->formText('related_content_weight_creator', get_option('related_content_weight_creator')); ?>
-	</div>
-</div>
-
-<div class="field">
-	<div class="two columns alpha">
-		<?php echo $view->formLabel('related_content_weight_contributor', __('Contributor')); ?>
-	</div>
-	<div class="inputs five columns omega">
-		<p class="explanation">
-			<?php echo __('The relative weight of similarity by Contributor (if blank, will not be considered).'); ?>
-		</p>
-		<?php echo $view->formText('related_content_weight_contributor', get_option('related_content_weight_contributor')); ?>
-	</div>
-</div>
-
-<div class="field">
-	<div class="two columns alpha">
-		<?php echo $view->formLabel('related_content_weight_type', __('Type')); ?>
-	</div>
-	<div class="inputs five columns omega">
-		<p class="explanation">
-			<?php echo __('The relative weight of similarity by Type (if blank, will not be considered).'); ?>
-		</p>
-		<?php echo $view->formText('related_content_weight_type', get_option('related_content_weight_type')); ?>
+		<table id="related_content-weights">
+			<thead>
+				<tr>
+					<th class="boxes-left"><?php echo __('Criteria'); ?></th>
+					<th class="boxes"><?php echo __('Weight'); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($criteria as $name=>$value): ?>
+				<tr>
+					<td class="boxes-left">
+						<?php echo __($name); ?>
+					</td>
+					<td class="boxes">
+						<?php echo $view->formText("related_content-weights[{$name}]", $value); ?>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
 	</div>
 </div>
