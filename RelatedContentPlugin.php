@@ -32,12 +32,16 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		set_option('related_content_limit', 6);
 		set_option('related_content_square_thumbnails', 1);
 		set_option('related_content_short_date', 0);
-		set_option('related_content_weight_subject', 2);
-		set_option('related_content_weight_tags', 2);
-		set_option('related_content_weight_date', 1.5);
-		set_option('related_content_weight_creator', 1);
-		set_option('related_content_weight_contributor', 1);
-		set_option('related_content_weight_type', 0.5);
+		$criteria = array(
+			'Subject' => 2,
+			'Tag' => 2,
+			'Date' => 1.5,
+			'Creator' => 1.2,
+			'Contributor' => 1,
+			'Type' => 0.5,
+			'Collection' => 0.5
+		);
+		set_option('related_content_weights', json_encode($criteria));
 	}
 
 	public function hookUninstall()
@@ -45,17 +49,15 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		delete_option('related_content_limit');
 		delete_option('related_content_square_thumbnails');
 		delete_option('related_content_short_date');
-		delete_option('related_content_weight_subject');
-		delete_option('related_content_weight_tags');
-		delete_option('related_content_weight_date');
-		delete_option('related_content_weight_creator');
-		delete_option('related_content_weight_contributor');
-		delete_option('related_content_weight_type');
+		delete_option('related_content_weights');
 	 }
 
 	public function hookInitialize()
 	{
 		add_translation_source(dirname(__FILE__) . '/languages');
+
+		$criteria = json_decode(get_option('related_content_weights'), true);
+		$this->_criteria = $criteria;
 	}
 	
 	public function hookConfig($args)
@@ -64,16 +66,16 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		set_option('related_content_limit', $post['related_content_limit']);
 		set_option('related_content_square_thumbnails', $post['related_content_square_thumbnails']);
 		set_option('related_content_short_date', $post['related_content_short_date']);
-		set_option('related_content_weight_subject', $post['related_content_weight_subject']);
-		set_option('related_content_weight_tags', $post['related_content_weight_tags']);
-		set_option('related_content_weight_date', $post['related_content_weight_date']);
-		set_option('related_content_square_thumbnails', $post['related_content_square_thumbnails']);
-		set_option('related_content_weight_contributor', $post['related_content_weight_contributor']);
-		set_option('related_content_weight_type', $post['related_content_weight_type']);
+
+		$criteria = isset($post['related_content-weights']) ? $post['related_content-weights'] : array();
+		$this->_criteria = $criteria;
+		set_option('related_content_weights', json_encode($criteria));
 	}
 	
 	public function hookConfigForm()
 	{
+		$criteria = $this->_criteria;
+		
 		include 'config_form.php';
 	}
 
@@ -91,7 +93,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		$thumbnailType = ((bool)get_option('related_content_square_thumbnails') ? 'square_thumbnail' : 'thumbnail');
 		$results = array();
 		
-		if ($weight = get_option('related_content_weight_subject') && $subjects = metadata($item, array('Dublin Core', 'Subject'), array('all' => true, 'no_filter' => true))) {
+		if ($weight = $this->_criteria['Subject'] && $subjects = metadata($item, array('Dublin Core', 'Subject'), array('all' => true, 'no_filter' => true))) {
 			// retrieve subject results
 			$results_subjects = self::getResultsByElement(49, $subjects, $weight);
 
@@ -99,7 +101,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			$results = self::addAndMergeArrays($results, $results_subjects);
 		}
 		
-		if ($weight = get_option('related_content_weight_tags') && metadata($item, 'has tags')) {
+		if ($weight = $this->_criteria['Tag'] && metadata($item, 'has tags')) {
 			// retrieve tag results
 			$tags = get_current_record('Item')->Tags;
 			$results_tags = get_records('Item', array('tags'=>$tags));
@@ -112,7 +114,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			$results = self::addAndMergeArrays($results, $results_tags);
 		}
 
-		if ($weight = get_option('related_content_weight_tags') && $date = metadata($item, array('Dublin Core', 'Date'), array('no_filter' => true))) {
+		if ($weight = $this->_criteria['Date'] && $date = metadata($item, array('Dublin Core', 'Date'), array('no_filter' => true))) {
 			if ((bool)get_option('related_content_short_date')) {
 				$date = substr($date, 0, 4);
 			}
@@ -124,7 +126,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			$results = self::addAndMergeArrays($results, $results_date);
 		}
 
-		if ($weight = get_option('related_content_weight_creator') && $creators = metadata($item, array('Dublin Core', 'Creator'), array('all' => true, 'no_filter' => true))) {
+		if ($weight = $this->_criteria['Creator'] && $creators = metadata($item, array('Dublin Core', 'Creator'), array('all' => true, 'no_filter' => true))) {
 			// retrieve creator results
 			$results_creators = self::getResultsByElement(39, $creators, $weight);
 
@@ -132,7 +134,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			$results = self::addAndMergeArrays($results, $results_creators);
 		}
 
-		if ($weight = get_option('related_content_weight_creator') && $contributors = metadata($item, array('Dublin Core', 'Contributor'), array('all' => true, 'no_filter' => true))) {
+		if ($weight = $this->_criteria['Contributor'] && $contributors = metadata($item, array('Dublin Core', 'Contributor'), array('all' => true, 'no_filter' => true))) {
 			// retrieve contributor results
 			$results_contributors = self::getResultsByElement(37, $contributors, $weight);
 
@@ -140,7 +142,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			$results = self::addAndMergeArrays($results, $results_contributors);
 		}
 
-		if ($weight = get_option('related_content_weight_type') && $types = metadata($item, array('Dublin Core', 'Type'), array('all' => true, 'no_filter' => true))) {
+		if ($weight = $this->_criteria['Type'] && $types = metadata($item, array('Dublin Core', 'Type'), array('all' => true, 'no_filter' => true))) {
 			// retrieve type results
 			$results_types = self::getResultsByElement(51, $types, $weight);
 
