@@ -150,6 +150,14 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			$results = self::addAndMergeArrays($results, $results_types);
 		}
 
+		if ($weight = $this->_criteria['Collection'] && $collection = get_collection_for_item($item)) {
+			// retrieve collection results
+			$results_collection = self::getResultsByCollection($collection, $weight);
+
+			// adds values to $results
+			$results = self::addAndMergeArrays($results, $results_collection);
+		}
+
 		// filter out actual item
 		unset($results[$item->id]);
 		
@@ -211,7 +219,8 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			->select()
 			->from(array('items' => $db->Item), 'id')
 			->joinLeft(array('_advanced_0' => $db->ElementText), $joinCondition . $element_id, array())
-			->where("_advanced_0.text IN ('" . implode("','", $element_array) . "')");
+			->where("_advanced_0.text IN ('" . implode("','", $element_array) . "')")
+			->where("public = 1");
 		$results = $db->fetchCol($select);
 		
 		// multiply by weight, according to importance of element
@@ -226,7 +235,22 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			->select()
 			->from(array('items' => $db->Item), 'id')
 			->joinLeft(array('_advanced_0' => $db->ElementText), $joinCondition . $element_id, array())
-			->where("_advanced_0.text LIKE '" . $date . "%'");
+			->where("_advanced_0.text LIKE '" . $date . "%'")
+			->where("public = 1");
+		$results = $db->fetchCol($select);
+		
+		// multiply by weight, according to importance of element
+		return self::countAndMultiply($results, $element_weight);
+	}
+	
+	public function getResultsByCollection($collection, $element_weight=1) {
+		$db = get_db();
+
+		$select = $db
+			->select()
+			->from(array('items' => $db->Item), 'id')
+			->where("collection_id = " . $collection->id)
+			->where("public = 1");
 		$results = $db->fetchCol($select);
 		
 		// multiply by weight, according to importance of element
