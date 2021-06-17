@@ -220,7 +220,8 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			->from(array('items' => $db->Item), 'id')
 			->joinLeft(array('_advanced_0' => $db->ElementText), $joinCondition . $element_id, array())
 			->where("_advanced_0.text IN ('" . implode("','", $element_array) . "')")
-			->where("public = 1");
+			->where("public = 1")
+			->order("rand()");
 		$results = $db->fetchCol($select);
 		
 		// multiply by weight, according to importance of element
@@ -236,7 +237,8 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			->from(array('items' => $db->Item), 'id')
 			->joinLeft(array('_advanced_0' => $db->ElementText), $joinCondition . $element_id, array())
 			->where("_advanced_0.text LIKE '" . $date . "%'")
-			->where("public = 1");
+			->where("public = 1")
+			->order("rand()");
 		$results = $db->fetchCol($select);
 		
 		// multiply by weight, according to importance of element
@@ -250,7 +252,8 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			->select()
 			->from(array('items' => $db->Item), 'id')
 			->where("collection_id = " . $collection->id)
-			->where("public = 1");
+			->where("public = 1")
+			->order("rand()");
 		$results = $db->fetchCol($select);
 		
 		// multiply by weight, according to importance of element
