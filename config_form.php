@@ -19,7 +19,7 @@
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The maximum amount of related Items to be suggested (default: 6).'); ?>
+			<?php echo __('The maximum amount of related Items to be suggested.'); ?>
 		</p>
 		<?php echo $view->formText('related_content_limit', get_option('related_content_limit')); ?>
 	</div>
