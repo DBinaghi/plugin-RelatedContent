@@ -10,7 +10,7 @@ Uncompress files and rename plugin folder "RelatedContent".
 Then install it like any other Omeka plugin.
 
 ## Weights configuration
-Several elements are considered to find related content: *Subject*, *Tags*, *Creator*, *Contributor*, *Date* and *Type* fields. Their relative weight can be adjusted in configuration page (by default, respectively: 2, 2, 1, 1, 1.5, 0.5). You might want to experiment with different values, although it's probably a good idea to keep Subject and Tags as heaviest.
+Several elements are considered to find related content: *Subject*, *Tags*, *Creator*, *Contributor*, *Date* and *Type* fields and *Collection*. Their relative weight can be adjusted in configuration page (by default, respectively: 2, 2, 1.2, 1, 1.5, 0.5, 0.5). You might want to experiment with different values, although it's probably a good idea to keep Subject and Tags as the heaviest.
 
 ## Warning
 Use it at your own risk.
