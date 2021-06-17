@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Locale\n"
 "Report-Msgid-Bugs-To: http://github.com/patrickmj/Multilanguage/issues\n"
 "POT-Creation-Date: 2021-06-16 6:49-0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-06-17 12:39-0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,57 +18,45 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: RelatedContentPlugin.php:162
-msgid "Related items you might want to check out"
+msgid "Related Items you might want to check out"
 msgstr ""
 
-#: config_form.php:5
-msgid "General settings"
-msgstr ""
-
-#: config_form.php:9
+#: config_form.php:18
 msgid "Items Limit"
 msgstr ""
 
-#: config_form.php:13
-msgid "The maximum amount of related Items to be suggested (default: 6)."
+#: config_form.php:22
+msgid "The maximum amount of related Items to be suggested."
 msgstr ""
 
-#: config_form.php:21
+#: config_form.php:30
 msgid "Use Square Thumbnails"
 msgstr ""
 
-#: config_form.php:25
+#: config_form.php:34
 msgid "If checked, cropped square thumbnails are displayed."
 msgstr ""
 
-#: config_form.php:33
+#: config_form.php:42
 msgid "Use Short Date"
 msgstr ""
 
-#: config_form.php:37
+#: config_form.php:46
 msgid "If checked, just the year (first 4 digits) will be considered for Date similarity."
 msgstr ""
 
-#: config_form.php:51
-msgid "The relative weight of similarity by Subject (if blank, will not be considered)."
+#: config_form.php:54
+msgid "Weights"
+msgstr ""
+
+#: config_form.php:58
+msgid "The search criterias's relative weights (if blank, criteria will not be considered)."
 msgstr ""
 
 #: config_form.php:63
-msgid "The relative weight of similarity by Tag (if blank, will not be considered)."
+msgid "Criteria"
 msgstr ""
 
-#: config_form.php:75
-msgid "The relative weight of similarity by Date (if blank, will not be considered)."
-msgstr ""
-
-#: config_form.php:87
-msgid "The relative weight of similarity by Creator (if blank, will not be considered)."
-msgstr ""
-
-#: config_form.php:99
-msgid "The relative weight of similarity by Contributor (if blank, will not be considered)."
-msgstr ""
-
-#: config_form.php:111
-msgid "The relative weight of similarity by Type (if blank, will not be considered)."
+#: config_form.php:64
+msgid "Weight"
 msgstr ""
