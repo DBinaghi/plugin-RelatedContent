@@ -51,7 +51,7 @@
 
 <div class="field">
 	<div class="two columns alpha">
-		<?php echo $view->formLabel('related_content-weights', __('Weights')); ?>
+		<?php echo $view->formLabel('related_content_criteria', __('Criteria')); ?>
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
@@ -62,16 +62,20 @@
 				<tr>
 					<th class="boxes-left"><?php echo __('Criteria'); ?></th>
 					<th class="boxes"><?php echo __('Weight'); ?></th>
+					<th class="boxes"><?php echo __('Constraint'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ($criteria as $name=>$value): ?>
+				<?php foreach ($criteria as $name => $values): ?>
 				<tr>
 					<td class="boxes-left">
 						<?php echo __($name); ?>
 					</td>
 					<td class="boxes">
-						<?php echo $view->formText("related_content-weights[{$name}]", $value); ?>
+						<?php echo $view->formText("related_content_criteria[{$name}][weight]", $values['weight']); ?>
+					</td>
+					<td class="boxes">
+						<?php echo $view->formCheckbox("related_content_criteria[{$name}][constraint]", $values['constraint'], null, array('1', '0')); ?>
 					</td>
 				</tr>
 				<?php endforeach; ?>
