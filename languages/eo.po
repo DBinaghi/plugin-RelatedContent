@@ -9,6 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://github.com/patrickmj/Multilanguage/issues\n"
 "POT-Creation-Date: 2021-06-16 6:49-0100\n"
 "PO-Revision-Date: 2021-06-17 12:39-0100\n"
+"PO-Revision-Date: 2021-06-22 17:09-0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Daniele BINAGHI <admin@bitoteko.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,11 +47,11 @@ msgid "If checked, just the year (first 4 digits) will be considered for Date si
 msgstr ""
 
 #: config_form.php:54
-msgid "Weights"
+msgid "Criteria"
 msgstr ""
 
 #: config_form.php:58
-msgid "The search criterias's relative weights (if blank, criteria will not be considered)."
+msgid "The search criterias's relative weights (if blank, criteria will not be considered) and constraint rule."
 msgstr ""
 
 #: config_form.php:63
@@ -59,4 +60,8 @@ msgstr ""
 
 #: config_form.php:64
 msgid "Weight"
+msgstr ""
+
+#: config_form.php:65
+msgid "Constraint"
 msgstr ""
