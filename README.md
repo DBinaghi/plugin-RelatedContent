@@ -12,6 +12,9 @@ Then install it like any other Omeka plugin.
 ## Weights configuration
 Several elements are considered to find related content: *Subject*, *Tags*, *Creator*, *Contributor*, *Date* and *Type* fields and *Collection*. Their relative weight can be adjusted in configuration page (by default, respectively: 2, 2, 1.2, 1, 1.5, 0.5, 0.5). You might want to experiment with different values, although it's probably a good idea to keep Subject and Tags as the heaviest.
 
+## Constraints configuration
+When applied to an element, a constraint excludes any result not belonging to that element. For example, if one wanted to limit plugin's suggestions to Item by a specific creator, they would check the Creator's "constraint" checkbox. 
+
 ## Warning
 Use it at your own risk.
 
