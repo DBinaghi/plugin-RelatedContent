@@ -43,7 +43,7 @@
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('If checked, just the year (first 4 digits) will be considered for Date similarity.'); ?>
+			<?php echo __('If checked, just the year (first 4 digits) will be considered for date similarity.'); ?>
 		</p>
 		<?php echo $view->formCheckbox('related_content_short_date', get_option('related_content_short_date'), null, array('1', '0')); ?>
 	</div>
@@ -55,7 +55,7 @@
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The search criterias\'s relative weights (if blank, criteria will not be considered).'); ?>
+			<?php echo __('The search criterias\'s relative weights (if blank, criteria will not be considered) and constraint rule.'); ?>
 		</p>
 		<table id="related_content-weights">
 			<thead>
