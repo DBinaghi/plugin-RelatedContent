@@ -10,10 +10,13 @@ Uncompress files and rename plugin folder "RelatedContent".
 Then install it like any other Omeka plugin.
 
 ## Weights configuration
-Several criteria are considered to find related content: *Subject*, *Tags*, *Creator*, *Contributor*, *Date* and *Type* fields and *Collection*. Their relative weight can be adjusted in configuration page (by default, respectively: 2, 2, 1.2, 1, 1.5, 0.5, 0.5). You might want to experiment with different values, although it's probably a good idea to keep Subject and Tags as the heaviest.
+Several criteria are considered to find related content: *Subject*, *Tags*, *Creator*, *Contributor*, *Date* and *Type* fields and *Collection*; from version 1.3 *Item Type* has been added. Their relative weight can be adjusted in configuration page (by default, respectively: 2, 2, 1.2, 1, 1.5, 0.5, 0.5, 0.5). You might want to experiment with different values, although it's probably a good idea to keep Subject and Tags as the heaviest.
 
 ## Constraints configuration
-When applied to a criterion, a constraint excludes any result not belonging to that criterion. For example, to limit plugin's suggestions to Item by a specific creator, one should check *Creator*'s "constraint" checkbox. 
+When applied to a criterion, a constraint excludes any result not belonging to that criterion. For example, to limit plugin's suggestions to Item by a specific creator, one should check *Creator*'s "constraint" checkbox.
+
+## Dublin Core Extended elements
+If the **DublinCoreExtended** plugin is installed and active, additional elements will be included in configuration: *Spatial Coverage* and *Temporal Coverage*. Other elements can be added, editing the `RelatedContentPlugin.php` file.
 
 ## Warning
 Use it at your own risk.
