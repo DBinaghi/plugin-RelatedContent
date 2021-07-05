@@ -60,7 +60,7 @@
 		<table id="related_content-weights">
 			<thead>
 				<tr>
-					<th class="boxes-left"><?php echo __('Criteria'); ?></th>
+					<th class="boxes-left"><?php echo __('Criterion'); ?></th>
 					<th class="boxes"><?php echo __('Weight'); ?></th>
 					<th class="boxes"><?php echo __('Constraint'); ?></th>
 				</tr>
