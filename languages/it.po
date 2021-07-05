@@ -55,7 +55,7 @@ msgid "The search criterias's relative weights (if blank, criteria will not be c
 msgstr "I pesi relativi dei criteri di ricerca (se vuoto, il criterio non verrà considerato) e regole di vincolo."
 
 #: config_form.php:63
-msgid "Criteria"
+msgid "Criterion"
 msgstr "Criterio"
 
 #: config_form.php:64
