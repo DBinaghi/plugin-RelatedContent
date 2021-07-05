@@ -21,6 +21,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		'install',
 		'uninstall',
 		'initialize',
+		'upgrade',
 		'config',
 		'config_form',
 		'public_head',
@@ -40,7 +41,8 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			"Creator" => array("weight" => 1.2, "constraint" => 0),
 			"Contributor" => array("weight" => 1, "constraint" => 0),
 			"Type" => array("weight" => 0.5, "constraint" => 0),
-			"Collection" => array("weight" => 0.5, "constraint" => 0)
+			"Collection" => array("weight" => 0.5, "constraint" => 0),
+			"Item Type" => array("weight" => 0.5, "constraint" => 0)
 		);
 		set_option('related_content_criteria', json_encode($criteria));
 	}
@@ -58,7 +60,34 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		add_translation_source(dirname(__FILE__) . '/languages');
 
 		$criteria = json_decode(get_option('related_content_criteria'), true);
+		
+		// Adds/removes elements if DublinCoreExtended plugin is/is not active
+		// Please note: here one can add other DCE:Elements, if needed
+		if (plugin_is_active('DublinCoreExtended')) {
+			if (!isset($criteria['Spatial Coverage'])) {
+				$criteria['Spatial Coverage'] = array("weight" => '', "constraint" => 0);
+			}
+			if (!isset($criteria['Temporal Coverage'])) {
+				$criteria['Temporal Coverage'] = array("weight" => '', "constraint" => 0);
+			}
+		} else {
+			unset($criteria['Spatial Coverage']);
+			unset($criteria['Temporal Coverage']);
+		}
+		
 		$this->_criteria = $criteria;
+	}
+	
+	public function hookUpgrade()
+	{
+        $oldVersion = $args['old_version'];
+        $newVersion = $args['new_version'];
+
+        if (version_compare($oldVersion, '1.3', '<')) {
+			$criteria = json_decode(get_option('related_content_criteria'), true);
+			$criteria['Item Type'] = array("weight" => '', "constraint" => 0);
+			set_option('related_content_criteria', json_encode($criteria));
+		}
 	}
 	
 	public function hookConfig($args)
@@ -94,14 +123,19 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		$results = array();
 		$constraints = array();
 		
+		// Dublin Core: Subject
 		if ($weight = $criteria['Subject']['weight'] && $subjects = metadata($item, array('Dublin Core', 'Subject'), array('all' => true, 'no_filter' => true))) {
 			// retrieve subject results
 			$results_subjects = self::getResultsByElement(49, $subjects, $weight);
+
+			// filter constraints array if needed
+			if ((bool)$criteria['Subject']['constraint']) $constraints =  self::updateConstraints($constraints, array_keys($results_subjects, 1));
 
 			// adds values to $results
 			$results = self::addAndMergeArrays($results, $results_subjects);
 		}
 		
+		// Tags
 		if ($weight = $criteria['Tag']['weight'] && metadata($item, 'has tags')) {
 			// retrieve tag results
 			$tags = get_current_record('Item')->Tags;
@@ -111,10 +145,14 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			// multiply by weight, according to importance of element
 			$results_tags = self::countAndMultiply($results_tags, $weight);
 
+			// filter constraints array if needed
+			if ((bool)$criteria['Tag']['constraint']) $constraints =  self::updateConstraints($constraints, array_keys($results_tags, 1));
+
 			// adds values to $results
 			$results = self::addAndMergeArrays($results, $results_tags);
 		}
 
+		// Dublin Core: Date
 		if ($weight = $criteria['Date']['weight'] && $date = metadata($item, array('Dublin Core', 'Date'), array('no_filter' => true))) {
 			if ((bool)get_option('related_content_short_date')) {
 				$date = substr($date, 0, 4);
@@ -123,10 +161,14 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			// retrieve date results
 			$results_date = self::getResultsByDateElement(40, $date, $weight);
 
+			// filter constraints array if needed
+			if ((bool)$criteria['Date']['constraint']) $constraints =  self::updateConstraints($constraints, array_keys($results_date, 1));
+
 			// adds values to $results
 			$results = self::addAndMergeArrays($results, $results_date);
 		}
 
+		// Dublin Core: Creator
 		if ($weight = $criteria['Creator']['weight'] && $creators = metadata($item, array('Dublin Core', 'Creator'), array('all' => true, 'no_filter' => true))) {
 			// retrieve creator results
 			$results_creators = self::getResultsByElement(39, $creators, $weight);
@@ -138,31 +180,86 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			$results = self::addAndMergeArrays($results, $results_creators);
 		}
 
+		// Dublin Core: Contributor
 		if ($weight = $criteria['Contributor']['weight'] && $contributors = metadata($item, array('Dublin Core', 'Contributor'), array('all' => true, 'no_filter' => true))) {
 			// retrieve contributor results
 			$results_contributors = self::getResultsByElement(37, $contributors, $weight);
+
+			// filter constraints array if needed
+			if ((bool)$criteria['Contributor']['constraint']) $constraints =  self::updateConstraints($constraints, array_keys($results_contributors, 1));
 
 			// adds values to $results
 			$results = self::addAndMergeArrays($results, $results_contributors);
 		}
 
+		// Dublin Core: Type
 		if ($weight = $criteria['Type']['weight'] && $types = metadata($item, array('Dublin Core', 'Type'), array('all' => true, 'no_filter' => true))) {
 			// retrieve type results
 			$results_types = self::getResultsByElement(51, $types, $weight);
+
+			// filter constraints array if needed
+			if ((bool)$criteria['Type']['constraint']) $constraints =  self::updateConstraints($constraints, array_keys($results_types, 1));
 
 			// adds values to $results
 			$results = self::addAndMergeArrays($results, $results_types);
 		}
 
+		// Collection
 		if ($weight = $criteria['Collection']['weight'] && $collection = get_collection_for_item($item)) {
 			// retrieve collection results
 			$results_collection = self::getResultsByCollection($collection, $weight);
+
+			// filter constraints array if needed
+			if ((bool)$criteria['Collection']['constraint']) $constraints =  self::updateConstraints($constraints, array_keys($results_collection, 1));
 
 			// adds values to $results
 			$results = self::addAndMergeArrays($results, $results_collection);
 		}
 
-		// filter out actual item
+		// Item Type
+		if ($weight = $criteria['Item Type']['weight'] && $itemTypeID = $item->item_type_id) {
+			// retrieve item type results
+			$results_item_type = self::getResultsByItemType($itemTypeID, $weight);
+
+			// filter constraints array if needed
+			if ((bool)$criteria['Item Type']['constraint']) $constraints =  self::updateConstraints($constraints, array_keys($results_item_type, 1));
+
+			// adds values to $results
+			$results = self::addAndMergeArrays($results, $results_item_type);
+		}
+		
+		// Dublin Core Extended elements
+		if (plugin_is_active('DublinCoreExtended')) {
+			// Spatial Coverage
+			if ($weight = $criteria['Spatial Coverage']['weight'] && $spatialCoverage = metadata($item, array('Dublin Core', 'Spatial Coverage'), array('all' => true, 'no_filter' => true))) {
+				// retrieve item type results
+				$results_spatial_coverage = self::getResultsByElement(112, $spatialCoverage, $weight);
+
+				// filter constraints array if needed
+				if ((bool)$criteria['Spatial Coverage']['constraint']) $constraints =  self::updateConstraints($constraints, array_keys($results_spatial_coverage, 1));
+
+				// adds values to $results
+				$results = self::addAndMergeArrays($results, $results_spatial_coverage);
+			}
+			// Temporal Coverage
+			// Note: other elements can be used, just add them similarly to this ones
+			if ($weight = $criteria['Temporal Coverage']['weight'] && $temporalCoverage = metadata($item, array('Dublin Core', 'Temporal Coverage'), array('no_filter' => true))) {
+				if ((bool)get_option('related_content_short_date')) {
+					$temporalCoverage = substr($temporalCoverage, 0, 4);
+				}
+
+				// retrieve item type results
+				$results_temporal_coverage = self::getResultsByElement(113, $temporalCoverage, $weight);
+
+				// filter constraints array if needed
+				if ((bool)$criteria['Temporal Coverage']['constraint']) $constraints =  self::updateConstraints($constraints, array_keys($results_temporal_coverage, 1));
+
+				// adds values to $results
+				$results = self::addAndMergeArrays($results, $results_temporal_coverage);
+			}
+		}
+
+		// filter out current item
 		unset($results[$item->id]);
 
 		// applies constraints
@@ -272,6 +369,21 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			->select()
 			->from(array('items' => $db->Item), 'id')
 			->where("collection_id = " . $collection->id)
+			->where("public = 1")
+			->order("rand()");
+		$results = $db->fetchCol($select);
+		
+		// multiply by weight, according to importance of element
+		return self::countAndMultiply($results, $element_weight);
+	}
+	
+	public function getResultsByItemType($itemTypeID, $element_weight=1) {
+		$db = get_db();
+
+		$select = $db
+			->select()
+			->from(array('items' => $db->Item), 'id')
+			->where("item_type_id = " . $itemTypeID)
 			->where("public = 1")
 			->order("rand()");
 		$results = $db->fetchCol($select);
