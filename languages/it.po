@@ -44,7 +44,7 @@ msgid "Use Short Date"
 msgstr "Usa data corta"
 
 #: config_form.php:46
-msgid "If checked, just the year (first 4 digits) will be considered for Date similarity."
+msgid "If checked, just the year (first 4 digits) will be considered for date similarity."
 msgstr "Se selezionata, solo l'anno (le prime 4 cifre) verrà considerato per la similarità per data."
 
 #: config_form.php:54
