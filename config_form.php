@@ -2,11 +2,14 @@
 	$view = get_view();
 ?>
 <style type = "text/css">
-	.boxes, .boxes-left {
+	.boxes, .boxes-left, .boxes-nowrap {
 		vertical-align: middle;
 	}
-	.boxes {
+	.boxes, .boxes-nowrap {
 		text-align: center;
+	}
+	.boxes-nowrap {
+		white-space: nowrap;
 	}
 	.boxes input {
 		margin-bottom: 0;
@@ -57,28 +60,164 @@
 		<p class="explanation">
 			<?php echo __('The search criterias\'s relative weights (if blank, criteria will not be considered) and constraint rule.'); ?>
 		</p>
-		<table id="related_content-weights">
+		<table id="related_content-table">
 			<thead>
 				<tr>
-					<th class="boxes-left"><?php echo __('Criterion'); ?></th>
+					<th class="boxes-nowrap"><?php echo __('Element name'); ?></th>
 					<th class="boxes"><?php echo __('Weight'); ?></th>
 					<th class="boxes"><?php echo __('Constraint'); ?></th>
+					<th class="boxes-nowrap"><?php echo __('Is Date'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ($criteria as $name => $values): ?>
+				<?php
+					$current_element_set = null;
+					foreach ($elements as $element):
+						if ($element->set_name != $current_element_set):
+							$current_element_set = $element->set_name;
+				?>
 				<tr>
-					<td class="boxes-left">
-						<?php echo __($name); ?>
+					<th colspan="4">
+						<strong><?php echo __($current_element_set); ?></strong>
+					</th>
+				</tr>
+				<?php 	endif; ?>
+				<tr>
+					<td><?php echo __($element->name); ?></td>
+					<td class="boxes">
+						<?php echo $view->formText(
+							"criteria[elements][{$element->id}][weight]",
+							$criteria['elements'][$element->id]['weight']
+						); ?>
 					</td>
 					<td class="boxes">
-						<?php echo $view->formText("related_content_criteria[{$name}][weight]", $values['weight']); ?>
+						<?php echo $view->formCheckbox(
+							"criteria[elements][{$element->id}][constraint]",
+							'1', 
+							array(
+								'disableHidden' => true,
+								'checked' => isset($criteria['elements'][$element->id]['constraint'])
+							)
+						); ?>
 					</td>
 					<td class="boxes">
-						<?php echo $view->formCheckbox("related_content_criteria[{$name}][constraint]", $values['constraint'], null, array('1', '0')); ?>
+						<?php echo $view->formCheckbox(
+							"criteria[elements][{$element->id}][isDate]",
+							'1', 
+							array(
+								'disableHidden' => true,
+								'checked' => (($element->set_name == "Dublin Core" && $element->name == "Date") || isset($criteria['elements'][$element->id]['isDate'])),
+								'disable' => ($element->set_name == "Dublin Core" && $element->name == "Date")
+							)
+						); ?>
 					</td>
 				</tr>
-				<?php endforeach; ?>
+			<?php endforeach; ?>
+				<tr>
+					<th colspan="4">
+						<strong><?php echo __('Item Type'); ?></strong>
+					</th>
+				</tr>
+				<tr>
+					<td><?php echo __('Item Type'); ?></td>
+					<td class="boxes">
+						<?php echo $view->formText(
+							"criteria[item type][weight]",
+							$criteria['item type']['weight']
+						); ?>
+					</td>
+					<td class="boxes">
+						<?php echo $view->formCheckbox(
+							"criteria[item type][constraint]",
+							'1', 
+							array(
+								'disableHidden' => true,
+								'checked' => isset($criteria['item type']['constraint'])
+							)
+						); ?>
+					</td>
+					<td class="boxes">
+						<?php echo $view->formCheckbox(
+							"criteria[item type][isDate]",
+							'1', 
+							array(
+								'disableHidden' => true,
+								'checked' => (isset($criteria['item type']['isDate'])),
+								'disable' => true
+							)
+						); ?>
+					</td>
+				</tr>
+				<tr>
+					<th colspan="4">
+						<strong><?php echo __('Collection'); ?></strong>
+					</th>
+				</tr>
+				<tr>
+					<td><?php echo __('Collection'); ?></td>
+					<td class="boxes">
+						<?php echo $view->formText(
+							"criteria[collection][weight]",
+							$criteria['collection']['weight']
+						); ?>
+					</td>
+					<td class="boxes">
+						<?php echo $view->formCheckbox(
+							"criteria[collection][constraint]",
+							'1', 
+							array(
+								'disableHidden' => true,
+								'checked' => isset($criteria['collection']['constraint'])
+							)
+						); ?>
+					</td>
+					<td class="boxes">
+						<?php echo $view->formCheckbox(
+							"criteria[collection][isDate]",
+							'1', 
+							array(
+								'disableHidden' => true,
+								'checked' => (isset($criteria['collection']['isDate'])),
+								'disable' => true
+							)
+						); ?>
+					</td>
+				</tr>
+				<tr>
+					<th colspan="4">
+						<strong><?php echo __('Tags'); ?></strong>
+					</th>
+				</tr>
+				<tr>
+					<td><?php echo __('Tags'); ?></td>
+					<td class="boxes">
+						<?php echo $view->formText(
+							"criteria[tags][weight]",
+							$criteria['tags']['weight']
+						); ?>
+					</td>
+					<td class="boxes">
+						<?php echo $view->formCheckbox(
+							"criteria[tags][constraint]",
+							'1', 
+							array(
+								'disableHidden' => true,
+								'checked' => isset($criteria['tags']['constraint'])
+							)
+						); ?>
+					</td>
+					<td class="boxes">
+						<?php echo $view->formCheckbox(
+							"criteria[tags][isDate]",
+							'1', 
+							array(
+								'disableHidden' => true,
+								'checked' => (isset($criteria['tags']['isDate'])),
+								'disable' => true
+							)
+						); ?>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
