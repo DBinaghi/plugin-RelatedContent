@@ -21,6 +21,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		'install',
 		'uninstall',
 		'initialize',
+		'upgrade',
 		'config',
 		'config_form',
 		'public_head',
@@ -59,6 +60,65 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 
 		$criteria = json_decode(get_option('related_content_criteria'), true);
 		$this->_criteria = $criteria;
+	}
+	
+	public function hookUpgrade()
+	{
+        $oldVersion = $args['old_version'];
+        $newVersion = $args['new_version'];
+
+        if (version_compare($oldVersion, '1.3', '<')) {
+			$criteria = json_decode(get_option('related_content_criteria'), true);
+			$criteria['Item Type'] = array("weight" => '', "constraint" => 0);
+			set_option('related_content_criteria', json_encode($criteria));
+		}
+
+        if (version_compare($oldVersion, '1.4', '<')) {
+			$criteria = json_decode(get_option('related_content_criteria'), true);
+			// Subject
+			if (isset($criteria['Subject'])) {
+				$criteria['elements'][49] = $criteria['Subject'];
+				unset($criteria['Subject']);
+			}
+			// Date
+			if (isset($criteria['Date'])) {
+				$criteria['elements'][40] = $criteria['Date'];
+				unset($criteria['Date']);
+			}
+			$criteria['elements'][40]['isDate'] = true;
+			// Creator
+			if (isset($criteria['Creator'])) {
+				$criteria['elements'][39] = $criteria['Creator'];
+				unset($criteria['Creator']);
+			}
+			// Contributor
+			if (isset($criteria['Contributor'])) {
+				$criteria['elements'][37] = $criteria['Contributor'];
+				unset($criteria['Contributor']);
+			}
+			// Type
+			if (isset($criteria['Type'])) {
+				$criteria['elements'][51] = $criteria['Type'];
+				unset($criteria['Type']);
+			}
+			// Collection
+			if (isset($criteria['Collection'])) {
+				$criteria['collection'] = $criteria['Collection'];
+				unset($criteria['Collection']);
+			}
+			// Item Type
+			if (isset($criteria['Item Type'])) {
+				$criteria['item type'] = $criteria['Item Type'];
+				unset($criteria['Item Type']);
+			}
+			// Tags
+			if (isset($criteria['Tag'])) {
+				$criteria['tags'] = $criteria['Tag'];
+				unset($criteria['Tag']);
+			}
+
+			set_option('related_content_criteria', json_encode($criteria));
+		}
 	}
 		
 	public function hookConfig($args)
