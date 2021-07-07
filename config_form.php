@@ -63,7 +63,7 @@
 		<table id="related_content-table">
 			<thead>
 				<tr>
-					<th class="boxes-nowrap"><?php echo __('Element name'); ?></th>
+					<th class="boxes-nowrap"><?php echo __('Criterion'); ?></th>
 					<th class="boxes"><?php echo __('Weight'); ?></th>
 					<th class="boxes"><?php echo __('Constraint'); ?></th>
 					<th class="boxes-nowrap"><?php echo __('Is Date'); ?></th>
@@ -115,7 +115,7 @@
 			<?php endforeach; ?>
 				<tr>
 					<th colspan="4">
-						<strong><?php echo __('Item Type'); ?></strong>
+						<strong><?php echo __('Other criteria'); ?></strong>
 					</th>
 				</tr>
 				<tr>
@@ -149,11 +149,6 @@
 					</td>
 				</tr>
 				<tr>
-					<th colspan="4">
-						<strong><?php echo __('Collection'); ?></strong>
-					</th>
-				</tr>
-				<tr>
 					<td><?php echo __('Collection'); ?></td>
 					<td class="boxes">
 						<?php echo $view->formText(
@@ -182,11 +177,6 @@
 							)
 						); ?>
 					</td>
-				</tr>
-				<tr>
-					<th colspan="4">
-						<strong><?php echo __('Tags'); ?></strong>
-					</th>
 				</tr>
 				<tr>
 					<td><?php echo __('Tags'); ?></td>
