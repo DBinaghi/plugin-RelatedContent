@@ -11,6 +11,7 @@ msgstr ""
 "PO-Revision-Date: 2021-06-17 12:39-0100\n"
 "PO-Revision-Date: 2021-06-22 17:09-0100\n"
 "PO-Revision-Date: 2021-07-05 11:45-0100\n"
+"PO-Revision-Date: 2021-07-07 09:36-0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,46 +24,66 @@ msgstr ""
 msgid "Related Items you might want to check out"
 msgstr ""
 
-#: config_form.php:18
+#: config_form.php:21
 msgid "Items Limit"
 msgstr ""
 
-#: config_form.php:22
+#: config_form.php:25
 msgid "The maximum amount of related Items to be suggested."
 msgstr ""
 
-#: config_form.php:30
+#: config_form.php:33
 msgid "Use Square Thumbnails"
 msgstr ""
 
-#: config_form.php:34
+#: config_form.php:37
 msgid "If checked, cropped square thumbnails are displayed."
 msgstr ""
 
-#: config_form.php:42
+#: config_form.php:45
 msgid "Use Short Date"
 msgstr ""
 
-#: config_form.php:46
+#: config_form.php:49
 msgid "If checked, just the year (first 4 digits) will be considered for date similarity."
 msgstr ""
 
-#: config_form.php:54
+#: config_form.php:57
 msgid "Criteria"
 msgstr ""
 
-#: config_form.php:58
+#: config_form.php:61
 msgid "The search criterias's relative weights (if blank, criteria will not be considered) and constraint rule."
 msgstr ""
 
-#: config_form.php:63
+#: config_form.php:66
 msgid "Criterion"
 msgstr ""
 
-#: config_form.php:64
+#: config_form.php:67
 msgid "Weight"
 msgstr ""
 
-#: config_form.php:65
+#: config_form.php:68
 msgid "Constraint"
+msgstr ""
+
+#: config_form.php:69
+msgid "Is Date"
+msgstr ""
+
+#: config_form.php:118
+msgid "Other criteria"
+msgstr ""
+
+#: config_form.php:122
+msgid "Item Type"
+msgstr ""
+
+#: config_form.php:152
+msgid "Collection"
+msgstr ""
+
+#: config_form.php:182
+msgid "Tags"
 msgstr ""
