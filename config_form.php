@@ -87,7 +87,7 @@
 					<td class="boxes">
 						<?php echo $view->formText(
 							"criteria[elements][{$element->id}][weight]",
-							$criteria['elements'][$element->id]['weight']
+							isset($criteria['elements'][$element->id]['weight']) ? $criteria['elements'][$element->id]['weight'] : ''
 						); ?>
 					</td>
 					<td class="boxes">
