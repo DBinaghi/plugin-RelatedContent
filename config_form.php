@@ -1,5 +1,6 @@
 <?php	
 	$view = get_view();
+	$dateFields = array('Date', 'Date Available', 'Date Created', 'Date Accepted', 'Date Copyrighted', 'Date Submitted', 'Date Issued', 'Date Modified', 'Date Valid');
 ?>
 <style type = "text/css">
 	.boxes, .boxes-left, .boxes-nowrap {
@@ -58,7 +59,7 @@
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The search criterias\'s relative weights (if blank, criteria will not be considered) and constraint rule.'); ?>
+			<?php echo __('The search criterias\'s relative weights (if blank, criteria will not be considered) and constraint rule. See plugin\'s documentation for additional instructions.'); ?>
 		</p>
 		<table id="related_content-table">
 			<thead>
@@ -106,8 +107,8 @@
 							'1', 
 							array(
 								'disableHidden' => true,
-								'checked' => (($element->set_name == "Dublin Core" && $element->name == "Date") || isset($criteria['elements'][$element->id]['isDate'])),
-								'disable' => ($element->set_name == "Dublin Core" && $element->name == "Date")
+								'checked' => (($element->set_name == "Dublin Core" && in_array($element->name, $dateFields)) || isset($criteria['elements'][$element->id]['isDate'])),
+								'disable' => ($element->set_name == "Dublin Core" && in_array($element->name, $dateFields))
 							)
 						); ?>
 					</td>
