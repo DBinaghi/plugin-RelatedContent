@@ -24,66 +24,70 @@ msgstr ""
 msgid "Related Items you might want to check out"
 msgstr "Documenti correlati che potresti voler controllare"
 
-#: config_form.php:21
+#: config_form.php:22
 msgid "Items Limit"
 msgstr "Limite documenti"
 
-#: config_form.php:25
+#: config_form.php:26
 msgid "The maximum amount of related Items to be suggested."
 msgstr "Il numero massimo di documenti correlati da suggerire."
 
-#: config_form.php:33
+#: config_form.php:34
 msgid "Use Square Thumbnails"
 msgstr "Usa miniature quadrate"
 
-#: config_form.php:37
+#: config_form.php:38
 msgid "If checked, cropped square thumbnails are displayed."
 msgstr "Se selezionata, verranno mostrate miniature squadrate."
 
-#: config_form.php:45
+#: config_form.php:46
 msgid "Use Short Date"
 msgstr "Usa data corta"
 
-#: config_form.php:49
+#: config_form.php:50
 msgid "If checked, just the year (first 4 digits) will be considered for date similarity."
 msgstr "Se selezionata, solo l'anno (le prime 4 cifre) verrà considerato per la similarità per data."
 
-#: config_form.php:57
+#: config_form.php:58
 msgid "Criteria"
 msgstr "Criteri"
 
-#: config_form.php:61
-msgid "The search criterias's relative weights (if blank, criteria will not be considered) and constraint rule."
-msgstr "I pesi relativi dei criteri di ricerca (se vuoto, il criterio non verrà considerato) e regole di vincolo."
+#: config_form.php:62
+msgid
+"The search criterias's relative weights (if blank, criteria will not be considered) and constraint rule. "
+"See plugin's documentation for detailed instructions."
+msgstr 
+"I pesi relativi dei criteri di ricerca (se vuoto, il criterio non verrà considerato) e regole di vincolo. "
+"Vedere la documentazione del plugin per detailed addizionali.
 
-#: config_form.php:66
+#: config_form.php:67
 msgid "Criterion"
 msgstr "Criterio"
 
-#: config_form.php:67
+#: config_form.php:68
 msgid "Weight"
 msgstr "Peso"
 
-#: config_form.php:68
+#: config_form.php:69
 msgid "Constraint"
 msgstr "Vincolo"
 
-#: config_form.php:69
+#: config_form.php:70
 msgid "Is Date"
 msgstr "È data"
 
-#: config_form.php:118
+#: config_form.php:119
 msgid "Other criteria"
 msgstr "Altri criteri"
 
-#: config_form.php:122
+#: config_form.php:123
 msgid "Item Type"
 msgstr "Tipologia documento"
 
-#: config_form.php:152
+#: config_form.php:153
 msgid "Collection"
 msgstr "Collezione"
 
-#: config_form.php:182
+#: config_form.php:183
 msgid "Tags"
 msgstr "Etichette"
