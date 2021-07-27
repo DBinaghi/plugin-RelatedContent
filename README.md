@@ -13,10 +13,10 @@ Then install it like any other Omeka plugin.
 All available elements and some extra criteria can be used to find related content: *Subject*, *Creator*, *Contributor*, *Date* and *Type* fields and *Collection*, *Tags* and *Item Type* are the suggested ones. Their relative weight (importance) can be adjusted in configuration page (for default elements: 2, 1.2, 1, 1.5, 0.5, 0.5, 2 and 0.5). You might want to experiment with different values, although it's probably a good idea to keep *Subject* and *Tags* as the heaviest.
 
 ## Constraints configuration
-When applied to a criterion, a constraint excludes any result not belonging to that criterion. For example, to limit all plugin's suggestions to Item created by a specific creator, one should check *Creator*'s "constraint" checkbox.
+When applied to a criterion, a constraint excludes any result not belonging to that criterion. For example, to limit all suggestions passed by the plugin to Items created by a specific creator, one should check *Creator*'s "constraint" checkbox.
 
 ## Is Date
-Every element can be marked as a date one (DC:Date is by default), to accept a shorter value (useful to find related content by year instead of by full date).
+Every element can be marked as a date one, to accept a shorter value (useful to find related content by year instead of by full date). By default
 
 ## Warning
 Use it at your own risk.
