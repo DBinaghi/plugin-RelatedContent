@@ -59,7 +59,7 @@
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The search criterias\'s relative weights (if blank, criteria will not be considered) and constraint rule. See plugin\'s documentation for additional instructions.'); ?>
+			<?php echo __('The search criterias\'s relative weights (if blank, criteria will not be considered) and constraint rule. See plugin\'s documentation for detailed instructions.'); ?>
 		</p>
 		<table id="related_content-table">
 			<thead>
