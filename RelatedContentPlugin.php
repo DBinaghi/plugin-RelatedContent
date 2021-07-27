@@ -167,7 +167,9 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 				$element = self::findElementById($key);
 				if ($metadata = metadata($item, array($element->set_name, $element->name), array('all' => true, 'no_filter' => true))) {
 					//shorten date, if required
-					if (isset($value['isDate']) && (bool)$value['isDate'] && (bool)get_option('related_content_short_date')) $metadata = substr($metadata, 0, 4);
+					if (isset($value['isDate']) && (bool)$value['isDate'] && (bool)get_option('related_content_short_date')) {
+						$metadata = substr($metadata, 0, 4);
+					}
 					
 					// retrieve results
 					$results_element = self::getResultsByElement($key, $metadata, $weight);
@@ -194,7 +196,9 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			$results_tags = self::countAndMultiply($results_tags, $weight);
 
 			// filter constraints array if needed
-			if (isset($criteria['tags']['constraint']) && (bool)$criteria['tags']['constraint']) $constraints =  self::updateConstraints($constraints, array_keys($results_tags));
+			if (isset($criteria['tags']['constraint']) && (bool)$criteria['tags']['constraint']) {
+				$constraints =  self::updateConstraints($constraints, array_keys($results_tags));
+			}
 
 			// adds values to $results
 			$results = self::addAndMergeArrays($results, $results_tags);
@@ -206,7 +210,9 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			$results_collection = self::getResultsByCollection($collection, $weight);
 
 			// filter constraints array if needed
-			if (isset($criteria['collection']['constraint']) && (bool)$criteria['collection']['constraint']) $constraints =  self::updateConstraints($constraints, array_keys($results_collection));
+			if (isset($criteria['collection']['constraint']) && (bool)$criteria['collection']['constraint']) {
+				$constraints =  self::updateConstraints($constraints, array_keys($results_collection));
+			}
 
 			// adds values to $results
 			$results = self::addAndMergeArrays($results, $results_collection);
@@ -218,7 +224,9 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			$results_item_type = self::getResultsByItemType($itemTypeID, $weight);
 
 			// filter constraints array if needed
-			if (isset($criteria['item type']['constraint']) && (bool)$criteria['item type']['constraint']) $constraints =  self::updateConstraints($constraints, array_keys($results_item_type));
+			if (isset($criteria['item type']['constraint']) && (bool)$criteria['item type']['constraint']) {
+				$constraints =  self::updateConstraints($constraints, array_keys($results_item_type));
+			}
 
 			// adds values to $results
 			$results = self::addAndMergeArrays($results, $results_item_type);
