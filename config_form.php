@@ -14,6 +14,8 @@
 	}
 	.boxes input {
 		margin-bottom: 0;
+		text-align: right;
+		width: 5em!important;
 	}
 </style>
 
@@ -84,7 +86,7 @@
 				</tr>
 				<?php 	endif; ?>
 				<tr>
-					<td><?php echo __($element->name); ?></td>
+					<td class="boxes-left"><?php echo __($element->name); ?></td>
 					<td class="boxes">
 						<?php echo $view->formText(
 							"criteria[elements][{$element->id}][weight]",
@@ -120,7 +122,7 @@
 					</th>
 				</tr>
 				<tr>
-					<td><?php echo __('Item Type'); ?></td>
+					<td class="boxes-left"><?php echo __('Item Type'); ?></td>
 					<td class="boxes">
 						<?php echo $view->formText(
 							"criteria[item type][weight]",
