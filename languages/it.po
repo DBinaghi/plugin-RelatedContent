@@ -58,7 +58,7 @@ msgid
 "See plugin's documentation for detailed instructions."
 msgstr 
 "I pesi relativi dei criteri di ricerca (se vuoto, il criterio non verrà considerato) e regole di vincolo. "
-"Vedere la documentazione del plugin per detailed addizionali.
+"Vedere la documentazione del plugin per istruzioni dettagliate.
 
 #: config_form.php:67
 msgid "Criterion"
