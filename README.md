@@ -16,7 +16,7 @@ Several criteria are considered to find related content: *Subject*, *Tags*, *Cre
 When applied to a criterion, a constraint excludes any result not belonging to that criterion. For example, to limit all suggestions passed by the plugin to Items created by a specific creator, one should check *Creator*'s "constraint" checkbox.
 
 ## Is Date
-Every element can be marked as a date one, to accept a shorter value (useful to find related content by year instead of by full date). By default, only Dublin Core's *Date* element is marked as date.
+Every element can be marked as a date one, to accept a shorter value (useful to find related content by year instead of by full date). By default, the following elements are considered to be date fields: *Date*, *Date Available*, *Date Created*, *Date Accepted*, *Date Copyrighted*, *Date Submitted*, *Date Issued*, *Date Modified* and *Date Valid*.
 
 ## Warning
 Use it at your own risk.
