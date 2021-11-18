@@ -10,13 +10,13 @@ Uncompress files and rename plugin folder "RelatedContent".
 Then install it like any other Omeka plugin.
 
 ## Weights configuration
-All available elements and some extra criteria can be used to find related content: *Subject*, *Creator*, *Contributor*, *Date* and *Type* fields and *Collection*, *Tags* and *Item Type* are the suggested ones. Their relative weight (importance) can be adjusted in configuration page (for default elements: 2, 1.2, 1, 1.5, 0.5, 0.5, 2 and 0.5). You might want to experiment with different values, although it's probably a good idea to keep *Subject* and *Tags* as the heaviest.
+Several criteria are considered to find related content: *Subject*, *Tags*, *Creator*, *Contributor*, *Date* and *Type* fields and *Collection*; from version 1.3 *Item Type* has been added. Their relative weight can be adjusted in configuration page (by default, respectively: 2, 2, 1.2, 1, 1.5, 0.5, 0.5, 0.5). You might want to experiment with different values, although it's probably a good idea to keep Subject and Tags as the heaviest.
 
 ## Constraints configuration
 When applied to a criterion, a constraint excludes any result not belonging to that criterion. For example, to limit all suggestions passed by the plugin to Items created by a specific creator, one should check *Creator*'s "constraint" checkbox.
 
 ## Is Date
-Every element can be marked as a date one, to accept a shorter value (useful to find related content by year instead of by full date). By default
+Every element can be marked as a date one, to accept a shorter value (useful to find related content by year instead of by full date). By default, only Dublin Core's *Date* element is marked as date.
 
 ## Warning
 Use it at your own risk.
