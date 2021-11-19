@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Locale\n"
-"Report-Msgid-Bugs-To: http://github.com/patrickmj/Multilanguage/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/DBinaghi/plugin-RelatedContent/issues\n"
 "POT-Creation-Date: 2021-06-16 6:49-0100\n"
 "PO-Revision-Date: 2021-06-17 12:39-0100\n"
 "PO-Revision-Date: 2021-06-22 17:09-0100\n"
