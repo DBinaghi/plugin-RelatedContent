@@ -309,9 +309,16 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			->select()
 			->from(array('items' => $db->Item), 'id')
 			->joinLeft(array('_advanced_0' => $db->ElementText), $joinCondition . $element_id, array())
-			->where("_advanced_0.text IN ('" . implode("','", $element_array) . "')")
 			->where("public = 1")
 			->order("rand()");
+
+		if (!empty($element_array)) {
+			$placeholders = implode(',', array_fill(0, count($element_array), '?'));
+			$select->where("_advanced_0.text IN ($placeholders)", $element_array);
+		} else {
+			return []; // Return empty if there's nothing to search for
+		}		
+
 		$results = $db->fetchCol($select);
 		
 		// multiply by weight, according to importance of element
