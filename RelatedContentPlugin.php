@@ -315,8 +315,6 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		if (!empty($element_array)) {
 			$placeholders = implode(',', array_fill(0, count($element_array), '?'));
 			$select->where("_advanced_0.text IN ($placeholders)", $element_array);
-		} else {
-			return []; // Return empty if there's nothing to search for
 		}		
 
 		$results = $db->fetchCol($select);
