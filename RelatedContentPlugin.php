@@ -17,6 +17,8 @@
  
 class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 {
+	public $_criteria;
+	
 	protected $_hooks = array(
 		'install',
 		'uninstall',
@@ -377,3 +379,4 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		return $db->getTable('Element')->find($elementID);
     }
 }
+
