@@ -378,5 +378,109 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 
 		return $db->getTable('Element')->find($elementID);
     }
-}
 
+	public function getRelatedItemsUnifiedRandom($item, $config, $limit = 10, $preLimit = 50)
+	{
+	    $db = get_db();
+	    $currentItemId = (int)$item->id;
+	
+	    $scoreParts = array();
+	
+	    /*
+	     * Collection weight
+	     */
+	    if (!empty($item->collection_id) && !empty($config['weight_collection'])) {
+	        $scoreParts[] = "
+	            IF(items.collection_id = " . (int)$item->collection_id . ",
+	               " . (float)$config['weight_collection'] . ",
+	               0)";
+	    }
+	
+	    /*
+	     * Item Type weight
+	     */
+	    if (!empty($item->item_type_id) && !empty($config['weight_item_type'])) {
+	        $scoreParts[] = "
+	            IF(items.item_type_id = " . (int)$item->item_type_id . ",
+	               " . (float)$config['weight_item_type'] . ",
+	               0)";
+	    }
+	
+	    /*
+	     * Base SELECT
+	     */
+	    $select = $db->select()
+	        ->from(
+	            array('items' => $db->Item),
+	            array(
+	                'id',
+	                'score' => new Zend_Db_Expr(
+	                    empty($scoreParts)
+	                        ? '0'
+	                        : '(' . implode(' + ', $scoreParts) . ')'
+	                )
+	            )
+	        )
+	        ->where('items.public = 1')
+	        ->where('items.id != ?', $currentItemId);
+	
+	    /*
+	     * Element-based scoring
+	     */
+	    foreach ($config['elements'] as $elementId => $elementData) {
+	
+	        $values = $elementData['values'];
+	        $weight = (float)$elementData['weight'];
+	
+	        if (empty($values) || empty($weight)) {
+	            continue;
+	        }
+	
+	        $alias = 'et_' . (int)$elementId;
+	        $placeholders = implode(',', array_fill(0, count($values), '?'));
+	
+	        $select->joinLeft(
+	            array($alias => $db->ElementText),
+	            "$alias.record_id = items.id
+	             AND $alias.record_type = 'Item'
+	             AND $alias.element_id = " . (int)$elementId . "
+	             AND $alias.text IN ($placeholders)",
+	            array()
+	        );
+	
+	        foreach ($values as $v) {
+	            $select->bind($v);
+	        }
+	
+	        $select->columns(array(
+	            'score' => new Zend_Db_Expr(
+	                "score + (CASE WHEN $alias.id IS NOT NULL THEN $weight ELSE 0 END)"
+	            )
+	        ));
+	    }
+	
+	    /*
+	     * Order by score (relevance)
+	     * Limit dataset (preLimit)
+	     */
+	    $select->group('items.id')
+	           ->order('score DESC')
+	           ->limit($preLimit);
+	
+	    $rankedResults = $db->fetchAll($select);
+	
+	    if (empty($rankedResults)) {
+	        return array();
+	    }
+	
+	    /*
+	     * Randomize subset
+	     */
+	    shuffle($rankedResults);
+	
+	    /*
+	     * Final cut
+	     */
+	    return array_slice($rankedResults, 0, $limit);
+	}
+}
