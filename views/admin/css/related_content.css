@@ -1,0 +1,41 @@
+/* ============================================================
+   Related Content plugin — admin config form styles
+   ============================================================ */
+
+#related_content-table .boxes,
+#related_content-table .boxes-left,
+#related_content-table .boxes-nowrap {
+	vertical-align: middle;
+}
+
+#related_content-table .boxes,
+#related_content-table .boxes-nowrap {
+	text-align: center;
+}
+
+#related_content-table .boxes-nowrap {
+	white-space: nowrap;
+}
+
+#related_content-table .boxes input {
+	margin-bottom: 0;
+	text-align: right;
+	width: 5em !important;
+}
+
+/* Active weight input */
+#related_content-table input.active-weight {
+	background-color: #eaf2e1;
+	border-color: inherit;
+}
+
+/* All weight inputs: keep default Omeka border */
+#related_content-table input[type="text"] {
+	border-color: inherit;
+}
+
+/* Column header tooltips */
+#related_content-table th[title] {
+	cursor: help;
+	border-bottom: 1px dotted #666;
+}
