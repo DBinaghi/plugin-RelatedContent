@@ -1,24 +1,8 @@
-<?php	
+<?php
 	$view = get_view();
 	$dateFields = array('Date', 'Date Available', 'Date Created', 'Date Accepted', 'Date Copyrighted', 'Date Submitted', 'Date Issued', 'Date Modified', 'Date Valid');
+	$docsUrl = 'https://github.com/DBinaghi/plugin-RelatedContent';
 ?>
-<style type = "text/css">
-	.boxes, .boxes-left, .boxes-nowrap {
-		vertical-align: middle;
-	}
-	.boxes, .boxes-nowrap {
-		text-align: center;
-	}
-	.boxes-nowrap {
-		white-space: nowrap;
-	}
-	.boxes input {
-		margin-bottom: 0;
-		text-align: right;
-		width: 5em!important;
-	}
-</style>
-
 <div class="field">
 	<div class="two columns alpha">
 		<?php echo $view->formLabel('related_content_limit', __('Items Limit')); ?>
@@ -57,19 +41,43 @@
 
 <div class="field">
 	<div class="two columns alpha">
+		<?php echo $view->formLabel('related_content_show_title', __('Show Item Title')); ?>
+	</div>
+	<div class="inputs five columns omega">
+		<p class="explanation">
+			<?php echo __('If checked, a truncated title is displayed below each thumbnail.'); ?>
+		</p>
+		<?php echo $view->formCheckbox('related_content_show_title', get_option('related_content_show_title'), null, array('1', '0')); ?>
+	</div>
+</div>
+
+<div class="field">
+	<div class="two columns alpha">
+		<?php echo $view->formLabel('related_content_exclude_no_image', __('Exclude Items Without Image')); ?>
+	</div>
+	<div class="inputs five columns omega">
+		<p class="explanation">
+			<?php echo __('If checked, Items with no associated files will not be suggested.'); ?>
+		</p>
+		<?php echo $view->formCheckbox('related_content_exclude_no_image', get_option('related_content_exclude_no_image'), null, array('1', '0')); ?>
+	</div>
+</div>
+
+<div class="field">
+	<div class="two columns alpha">
 		<?php echo $view->formLabel('related_content_criteria', __('Criteria')); ?>
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The search criterias\'s relative weights (if blank, criteria will not be considered) and constraint rule. See plugin\'s documentation for detailed instructions.'); ?>
+			<?php echo sprintf(__('The search criteria\'s relative weights (if blank, criteria will not be considered) and constraint rule. See the <a href="%s" target="_blank">plugin\'s documentation</a> for detailed instructions.'), $docsUrl); ?>
 		</p>
 		<table id="related_content-table">
 			<thead>
 				<tr>
 					<th class="boxes-nowrap"><?php echo __('Criterion'); ?></th>
-					<th class="boxes"><?php echo __('Weight'); ?></th>
-					<th class="boxes"><?php echo __('Constraint'); ?></th>
-					<th class="boxes-nowrap"><?php echo __('Is Date'); ?></th>
+					<th class="boxes" title="<?php echo __('A positive number. Higher values increase the importance of this criterion. Leave blank to ignore it.'); ?>"><?php echo __('Weight'); ?></th>
+					<th class="boxes" title="<?php echo __('If checked, only items matching this criterion will be suggested, regardless of other criteria.'); ?>"><?php echo __('Constraint'); ?></th>
+					<th class="boxes-nowrap" title="<?php echo __('If checked, only the first 4 characters (the year) will be used for matching. Requires \"Use Short Date\" to be enabled above.'); ?>"><?php echo __('Is Date'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -126,7 +134,7 @@
 					<td class="boxes">
 						<?php echo $view->formText(
 							"criteria[item type][weight]",
-							$criteria['item type']['weight']
+							isset($criteria['item type']['weight']) ? htmlspecialchars($criteria['item type']['weight'], ENT_QUOTES, 'UTF-8') : ''
 						); ?>
 					</td>
 					<td class="boxes">
@@ -152,11 +160,11 @@
 					</td>
 				</tr>
 				<tr>
-					<td><?php echo __('Collection'); ?></td>
+					<td class="boxes-left"><?php echo __('Collection'); ?></td>
 					<td class="boxes">
 						<?php echo $view->formText(
 							"criteria[collection][weight]",
-							$criteria['collection']['weight']
+							isset($criteria['collection']['weight']) ? htmlspecialchars($criteria['collection']['weight'], ENT_QUOTES, 'UTF-8') : ''
 						); ?>
 					</td>
 					<td class="boxes">
@@ -182,11 +190,11 @@
 					</td>
 				</tr>
 				<tr>
-					<td><?php echo __('Tags'); ?></td>
+					<td class="boxes-left"><?php echo __('Tags'); ?></td>
 					<td class="boxes">
 						<?php echo $view->formText(
 							"criteria[tags][weight]",
-							$criteria['tags']['weight']
+							isset($criteria['tags']['weight']) ? htmlspecialchars($criteria['tags']['weight'], ENT_QUOTES, 'UTF-8') : ''
 						); ?>
 					</td>
 					<td class="boxes">
