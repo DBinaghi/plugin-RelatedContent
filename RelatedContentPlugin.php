@@ -5,19 +5,19 @@
  * Suggests Items related to the one currently shown
 
  *
- * @copyright Daniele Binaghi, 2021
+ * @copyright Daniele Binaghi, 2021-2026
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
- * @package Reference
+ * @package RelatedContent
  */
 
 /**
  * The RelatedContent plugin.
- * @package Omeka\Plugins\Reference
+ * @package Omeka\Plugins\RelatedContent
  */
  
 class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 {
-	public $_criteria;
+	protected $_criteria;
 	
 	protected $_hooks = array(
 		'install',
@@ -26,6 +26,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		'upgrade',
 		'config',
 		'config_form',
+		'admin_head',
 		'public_head',
 		'public_items_show'
 	);
@@ -35,6 +36,8 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		set_option('related_content_limit', 6);
 		set_option('related_content_square_thumbnails', 1);
 		set_option('related_content_short_date', 0);
+		set_option('related_content_show_title', 1);
+		set_option('related_content_exclude_no_image', 0);
 
 		$criteria = array();
 		$criteria['elements'][49]['weight'] = 2; 	// Subject
@@ -53,12 +56,22 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		delete_option('related_content_limit');
 		delete_option('related_content_square_thumbnails');
 		delete_option('related_content_short_date');
+		delete_option('related_content_show_title');
+		delete_option('related_content_exclude_no_image');
 		delete_option('related_content_criteria');
 	 }
 
 	public function hookInitialize()
 	{
 		add_translation_source(dirname(__FILE__) . '/languages');
+
+		// Initialize new options if missing (e.g. after upgrade from older version)
+		if (get_option('related_content_show_title') === null) {
+			set_option('related_content_show_title', 1);
+		}
+		if (get_option('related_content_exclude_no_image') === null) {
+			set_option('related_content_exclude_no_image', 0);
+		}
 
 		$criteria = json_decode(get_option('related_content_criteria'), true);
 		$this->_criteria = $criteria;
@@ -126,11 +139,36 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 	public function hookConfig($args)
 	{
 		$post = $args['post'];
-		set_option('related_content_limit', $post['related_content_limit']);
+
+		// Validate and sanitize Items Limit
+		$limit = (int)$post['related_content_limit'];
+		if ($limit < 1) $limit = 1;
+		set_option('related_content_limit', $limit);
+
 		set_option('related_content_square_thumbnails', $post['related_content_square_thumbnails']);
 		set_option('related_content_short_date', $post['related_content_short_date']);
+		set_option('related_content_show_title', isset($post['related_content_show_title']) ? 1 : 0);
+		set_option('related_content_exclude_no_image', isset($post['related_content_exclude_no_image']) ? 1 : 0);
 
+		// Validate weights: must be numeric and positive, or empty
 		$criteria = isset($post['criteria']) ? $post['criteria'] : array();
+		if (isset($criteria['elements'])) {
+			foreach ($criteria['elements'] as $id => $element) {
+				if (isset($element['weight']) && $element['weight'] !== '') {
+					$criteria['elements'][$id]['weight'] = is_numeric($element['weight']) && $element['weight'] > 0
+						? (float)$element['weight']
+						: '';
+				}
+			}
+		}
+		foreach (array('tags', 'collection', 'item type') as $key) {
+			if (isset($criteria[$key]['weight']) && $criteria[$key]['weight'] !== '') {
+				$criteria[$key]['weight'] = is_numeric($criteria[$key]['weight']) && $criteria[$key]['weight'] > 0
+					? (float)$criteria[$key]['weight']
+					: '';
+			}
+		}
+
 		$this->_criteria = $criteria;
 		set_option('related_content_criteria', json_encode($criteria));
 	}
@@ -149,21 +187,37 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		include 'config_form.php';
 	}
 
+	public function hookAdminHead($args)
+	{
+		// Load CSS and JS only on the plugin's own config page
+		$request = Zend_Controller_Front::getInstance()->getRequest();
+		if ($request->getControllerName() === 'plugins' && $request->getActionName() === 'config') {
+			queue_css_file('related_content');
+			queue_js_file('related_content');
+		}
+	}
+
 	public function hookPublicHead($args)
 	{
-		queue_css_file('related_content');
+		$request = Zend_Controller_Front::getInstance()->getRequest();
+		if ($request->getControllerName() === 'items' && $request->getActionName() === 'show') {
+			queue_css_file('related_content');
+		}
 	}
-	
+
 	public function hookPublicItemsShow($args)
 	{
 		$criteria = $this->_criteria;
 		$item = $args['item'];
 		$limit = (int)get_option('related_content_limit');
 		$thumbnailType = ((bool)get_option('related_content_square_thumbnails') ? 'square_thumbnail' : 'thumbnail');
+		$showTitle = (bool)get_option('related_content_show_title');
+		$excludeNoImage = (bool)get_option('related_content_exclude_no_image');
 		$results = array();
 		$constraints = array();
 		
 		// Elements
+		if (isset($criteria['elements']) && is_array($criteria['elements'])) {
 		foreach ($criteria['elements'] as $key => $value) {
 			if (isset($value['weight']) && $weight = $value['weight']) {
 				$element = self::findElementById($key);
@@ -171,10 +225,12 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 					//shorten date, if required
 					if (isset($value['isDate']) && (bool)$value['isDate'] && (bool)get_option('related_content_short_date')) {
 						$metadata = array_map(function($m) { return substr($m, 0, 4); }, $metadata);
+						// retrieve results using date-specific method (LIKE match)
+						$results_element = self::getResultsByDateElement($key, $metadata, $weight);
+					} else {
+						// retrieve results
+						$results_element = self::getResultsByElement($key, $metadata, $weight);
 					}
-					
-					// retrieve results
-					$results_element = self::getResultsByElement($key, $metadata, $weight);
 
 					// filter constraints array if needed
 					if (isset($value['constraint']) && (bool)$value['constraint']) {
@@ -186,6 +242,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 				}
 			}
 		}
+		} // end isset criteria elements
 		
 		// Tags
 		if (($weight = $criteria['tags']['weight']) && metadata($item, 'has tags')) {
@@ -207,7 +264,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		}
 
 		// Collection
-		if (($weight = $criteria['collection']['weight']) && $collection = get_collection_for_item($item)) {
+		if (($weight = $criteria['collection']['weight']) && ($collection = get_collection_for_item($item))) {
 			// retrieve collection results
 			$results_collection = self::getResultsByCollection($collection, $weight);
 
@@ -221,7 +278,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		}
 
 		// Item Type
-		if (($weight = $criteria['item type']['weight']) && $itemTypeID = $item->item_type_id) {
+		if (($weight = $criteria['item type']['weight']) && ($itemTypeID = $item->item_type_id)) {
 			// retrieve item type results
 			$results_item_type = self::getResultsByItemType($itemTypeID, $weight);
 
@@ -246,29 +303,49 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		}
 		
 		if (count($results) > 0) {
-			$i = 1;
-			
-			// order results by frequency
+			// order results by score, then shuffle items with equal score for variety
 			arsort($results);
+			$grouped = array();
+			foreach ($results as $key => $value) {
+				$grouped[(string)$value][] = $key;
+			}
+			$sorted = array();
+			foreach ($grouped as $score => $ids) {
+				shuffle($ids);
+				foreach ($ids as $id) {
+					$sorted[$id] = $score;
+				}
+			}
 
 			// displays thumbnails
-			echo "<div id='related_content'>\n";
+			echo "<div id='related_content'" . ($showTitle ? " class='show-title'" : "") . ">\n";
 			echo "<h3><strong>" . __('Related Items you might want to check out') . "...</strong></h3>";
+			echo "<div class='related-items'>\n";
 
-			foreach ($results as $key => $value) {
+			$i = 1;
+			foreach ($sorted as $key => $value) {
 				$item = get_record_by_id('Item', $key);
-				
-				echo link_to_item(
-					item_image($thumbnailType, array('alt' => str_replace("&#039;", "'", metadata($item, array('Dublin Core','Title')))), 0, $item),
-					array('class' => 'image'), 
-					'show', 
-					$item
-				);
-				
+
+				// skip items without image if required
+				if ($excludeNoImage && !metadata($item, 'has files')) {
+					continue;
+				}
+
+				$title = html_entity_decode(metadata($item, array('Dublin Core', 'Title')), ENT_QUOTES, 'UTF-8');
+				$truncatedTitle = mb_strlen($title) > 20 ? mb_substr($title, 0, 20) . '...' : $title;
+
+				$content = item_image($thumbnailType, array('alt' => $title), 0, $item);
+				if ($showTitle) {
+					$content .= '<span class="related-title">' . html_escape($truncatedTitle) . '</span>';
+				}
+
+				echo link_to_item($content, array('class' => 'image', 'title' => $title), 'show', $item);
+
 				$i++;
 				if ($i > $limit) break;
 			}
 			
+			echo "</div>\n";
 			echo "</div>";
 		}
 	}
@@ -277,8 +354,8 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		// add count field to array
 		$items_counted = array_count_values($items);
 
-		// multiply value if needed
-		if ($multiplier > 1) {
+		// multiply value if needed (handles weights both > 1 and < 1)
+		if ($multiplier != 1) {
 			foreach ($items_counted as $key=>&$value) {
 				$value = $value * $multiplier;
 			}
@@ -311,8 +388,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			->select()
 			->from(array('items' => $db->Item), 'id')
 			->joinLeft(array('_advanced_0' => $db->ElementText), $joinCondition . $element_id, array())
-			->where("public = 1")
-			->order("rand()");
+			->where("public = 1");
 
 		if (!empty($element_array)) {
 			$placeholders = implode(',', array_fill(0, count($element_array), '?'));
@@ -325,17 +401,29 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		return self::countAndMultiply($results, $element_weight);
 	}
 	
-	public function getResultsByDateElement($element_id, $date, $element_weight=1) {
+	public function getResultsByDateElement($element_id, $dates, $element_weight=1) {
 		$db = get_db();
 		$joinCondition = '_advanced_0.record_id = items.id AND _advanced_0.record_type = \'Item\' AND _advanced_0.element_id = ';
+
+		// $dates can be a single string or an array (when 'all' => true)
+		if (!is_array($dates)) {
+			$dates = array($dates);
+		}
 
 		$select = $db
 			->select()
 			->from(array('items' => $db->Item), 'id')
 			->joinLeft(array('_advanced_0' => $db->ElementText), $joinCondition . $element_id, array())
-			->where("_advanced_0.text LIKE '" . $date . "%'")
-			->where("public = 1")
-			->order("rand()");
+			->where("public = 1");
+
+		$orConditions = array();
+		foreach ($dates as $date) {
+			$orConditions[] = $db->quoteInto("_advanced_0.text LIKE ?", $date . '%');
+		}
+		if (!empty($orConditions)) {
+			$select->where(implode(' OR ', $orConditions));
+		}
+
 		$results = $db->fetchCol($select);
 		
 		// multiply by weight, according to importance of element
@@ -348,9 +436,8 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		$select = $db
 			->select()
 			->from(array('items' => $db->Item), 'id')
-			->where("collection_id = " . $collection->id)
-			->where("public = 1")
-			->order("rand()");
+			->where("collection_id = ?", (int)$collection->id)
+			->where("public = 1");
 		$results = $db->fetchCol($select);
 		
 		// multiply by weight, according to importance of element
@@ -363,9 +450,8 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		$select = $db
 			->select()
 			->from(array('items' => $db->Item), 'id')
-			->where("item_type_id = " . $itemTypeID)
-			->where("public = 1")
-			->order("rand()");
+			->where("item_type_id = ?", (int)$itemTypeID)
+			->where("public = 1");
 		$results = $db->fetchCol($select);
 		
 		// multiply by weight, according to importance of element
@@ -378,110 +464,4 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 
 		return $db->getTable('Element')->find($elementID);
     }
-
-	public function getRelatedItemsUnifiedRandom($item, $config, $limit = 10, $preLimit = 50)
-	{
-	    $db = get_db();
-	    $currentItemId = (int)$item->id;
-	
-	    $scoreParts = array();
-	
-	    /*
-	     * Collection weight
-	     */
-	    if (!empty($item->collection_id) && !empty($config['weight_collection'])) {
-	        $scoreParts[] = "
-	            IF(items.collection_id = " . (int)$item->collection_id . ",
-	               " . (float)$config['weight_collection'] . ",
-	               0)";
-	    }
-	
-	    /*
-	     * Item Type weight
-	     */
-	    if (!empty($item->item_type_id) && !empty($config['weight_item_type'])) {
-	        $scoreParts[] = "
-	            IF(items.item_type_id = " . (int)$item->item_type_id . ",
-	               " . (float)$config['weight_item_type'] . ",
-	               0)";
-	    }
-	
-	    /*
-	     * Base SELECT
-	     */
-	    $select = $db->select()
-	        ->from(
-	            array('items' => $db->Item),
-	            array(
-	                'id',
-	                'score' => new Zend_Db_Expr(
-	                    empty($scoreParts)
-	                        ? '0'
-	                        : '(' . implode(' + ', $scoreParts) . ')'
-	                )
-	            )
-	        )
-	        ->where('items.public = 1')
-	        ->where('items.id != ?', $currentItemId);
-	
-	    /*
-	     * Element-based scoring
-	     */
-	    foreach ($config['elements'] as $elementId => $elementData) {
-	
-	        $values = $elementData['values'];
-	        $weight = (float)$elementData['weight'];
-	
-	        if (empty($values) || empty($weight)) {
-	            continue;
-	        }
-	
-	        $alias = 'et_' . (int)$elementId;
-	        $placeholders = implode(',', array_fill(0, count($values), '?'));
-	
-	        $select->joinLeft(
-	            array($alias => $db->ElementText),
-	            "$alias.record_id = items.id
-	             AND $alias.record_type = 'Item'
-	             AND $alias.element_id = " . (int)$elementId . "
-	             AND $alias.text IN ($placeholders)",
-	            array()
-	        );
-	
-	        foreach ($values as $v) {
-	            $select->bind($v);
-	        }
-	
-	        $select->columns(array(
-	            'score' => new Zend_Db_Expr(
-	                "score + (CASE WHEN $alias.id IS NOT NULL THEN $weight ELSE 0 END)"
-	            )
-	        ));
-	    }
-	
-	    /*
-	     * Order by score (relevance)
-	     * Limit dataset (preLimit)
-	     */
-	    $select->group('items.id')
-	           ->order('score DESC')
-	           ->limit($preLimit);
-	
-	    $rankedResults = $db->fetchAll($select);
-	
-	    if (empty($rankedResults)) {
-	        return array();
-	    }
-	
-	    /*
-	     * Randomize subset
-	     */
-	    shuffle($rankedResults);
-	
-	    /*
-	     * Final cut
-	     */
-	    return array_slice($rankedResults, 0, $limit);
-	}
 }
-
