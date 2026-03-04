@@ -64,7 +64,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		$this->_criteria = $criteria;
 	}
 	
-	public function hookUpgrade()
+	public function hookUpgrade($args)
 	{
         $oldVersion = $args['old_version'];
         $newVersion = $args['new_version'];
@@ -170,7 +170,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 				if ($metadata = metadata($item, array($element->set_name, $element->name), array('all' => true, 'no_filter' => true))) {
 					//shorten date, if required
 					if (isset($value['isDate']) && (bool)$value['isDate'] && (bool)get_option('related_content_short_date')) {
-						$metadata = substr($metadata, 0, 4);
+						$metadata = array_map(function($m) { return substr($m, 0, 4); }, $metadata);
 					}
 					
 					// retrieve results
@@ -188,7 +188,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		}
 		
 		// Tags
-		if ($weight = $criteria['tags']['weight'] && metadata($item, 'has tags')) {
+		if (($weight = $criteria['tags']['weight']) && metadata($item, 'has tags')) {
 			// retrieve tag results
 			$tags = get_current_record('Item')->Tags;
 			$results_tags = get_records('Item', array('tags'=>$tags));
@@ -207,7 +207,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		}
 
 		// Collection
-		if ($weight = $criteria['collection']['weight'] && $collection = get_collection_for_item($item)) {
+		if (($weight = $criteria['collection']['weight']) && $collection = get_collection_for_item($item)) {
 			// retrieve collection results
 			$results_collection = self::getResultsByCollection($collection, $weight);
 
@@ -221,7 +221,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		}
 
 		// Item Type
-		if ($weight = $criteria['item type']['weight'] && $itemTypeID = $item->item_type_id) {
+		if (($weight = $criteria['item type']['weight']) && $itemTypeID = $item->item_type_id) {
 			// retrieve item type results
 			$results_item_type = self::getResultsByItemType($itemTypeID, $weight);
 
@@ -484,3 +484,4 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 	    return array_slice($rankedResults, 0, $limit);
 	}
 }
+
