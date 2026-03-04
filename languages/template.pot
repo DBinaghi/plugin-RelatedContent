@@ -1,5 +1,5 @@
 # Translation for the RelatedContent plugin for Omeka.
-# Copyright (C) 2021 Daniele BINAGHI
+# Copyright (C) 2021-2026 Daniele BINAGHI
 # This file is distributed under the same license as the Omeka package.
 #
 #, fuzzy
@@ -8,10 +8,6 @@ msgstr ""
 "Project-Id-Version: Locale\n"
 "Report-Msgid-Bugs-To: https://github.com/DBinaghi/plugin-RelatedContent/issues\n"
 "POT-Creation-Date: 2021-06-16 6:49-0100\n"
-"PO-Revision-Date: 2021-06-17 12:39-0100\n"
-"PO-Revision-Date: 2021-06-22 17:09-0100\n"
-"PO-Revision-Date: 2021-07-05 11:45-0100\n"
-"PO-Revision-Date: 2021-07-07 09:36-0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,73 +15,3 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: RelatedContentPlugin.php:162
-msgid "Related Items you might want to check out"
-msgstr ""
-
-#: config_form.php:22
-msgid "Items Limit"
-msgstr ""
-
-#: config_form.php:26
-msgid "The maximum amount of related Items to be suggested."
-msgstr ""
-
-#: config_form.php:34
-msgid "Use Square Thumbnails"
-msgstr ""
-
-#: config_form.php:38
-msgid "If checked, cropped square thumbnails are displayed."
-msgstr ""
-
-#: config_form.php:46
-msgid "Use Short Date"
-msgstr ""
-
-#: config_form.php:50
-msgid "If checked, just the year (first 4 digits) will be considered for date similarity."
-msgstr ""
-
-#: config_form.php:58
-msgid "Criteria"
-msgstr ""
-
-#: config_form.php:62
-msgid 
-"The search criterias's relative weights (if blank, criteria will not be considered) and constraint rule. "
-"See plugin's documentation for detailed instructions."
-msgstr ""
-
-#: config_form.php:67
-msgid "Criterion"
-msgstr ""
-
-#: config_form.php:68
-msgid "Weight"
-msgstr ""
-
-#: config_form.php:69
-msgid "Constraint"
-msgstr ""
-
-#: config_form.php:70
-msgid "Is Date"
-msgstr ""
-
-#: config_form.php:119
-msgid "Other criteria"
-msgstr ""
-
-#: config_form.php:123
-msgid "Item Type"
-msgstr ""
-
-#: config_form.php:153
-msgid "Collection"
-msgstr ""
-
-#: config_form.php:183
-msgid "Tags"
-msgstr ""

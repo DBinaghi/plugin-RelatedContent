@@ -1,5 +1,5 @@
 # Translation for the RelatedContent plugin for Omeka.
-# Copyright (C) 2021 Daniele BINAGHI
+# Copyright (C) 2021-2026 Daniele BINAGHI
 # This file is distributed under the same license as the Omeka package.
 #
 #, fuzzy
@@ -8,86 +8,111 @@ msgstr ""
 "Project-Id-Version: Locale\n"
 "Report-Msgid-Bugs-To: https://github.com/DBinaghi/plugin-RelatedContent/issues\n"
 "POT-Creation-Date: 2021-06-16 6:49-0100\n"
-"PO-Revision-Date: 2021-06-17 12:39-0100\n"
+"PO-Revision-Date: 2026-03-05 00:30+0100\n"
 "PO-Revision-Date: 2021-06-22 17:09-0100\n"
 "PO-Revision-Date: 2021-07-05 11:45-0100\n"
 "PO-Revision-Date: 2021-07-07 09:36-0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Daniele BINAGHI <admin@bitoteko.it>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: Daniele Binaghi\n"
+"Language-Team: \n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
 
-#: RelatedContentPlugin.php:162
+#: RelatedContentPlugin.php:322
 msgid "Related Items you might want to check out"
 msgstr "Documenti correlati che potresti voler controllare"
 
-#: config_form.php:22
+#: config_form.php:8
 msgid "Items Limit"
 msgstr "Limite documenti"
 
-#: config_form.php:26
+#: config_form.php:12
 msgid "The maximum amount of related Items to be suggested."
 msgstr "Il numero massimo di documenti correlati da suggerire."
 
-#: config_form.php:34
+#: config_form.php:20
 msgid "Use Square Thumbnails"
 msgstr "Usa miniature quadrate"
 
-#: config_form.php:38
+#: config_form.php:24
 msgid "If checked, cropped square thumbnails are displayed."
 msgstr "Se selezionata, verranno mostrate miniature squadrate."
 
-#: config_form.php:46
+#: config_form.php:32
 msgid "Use Short Date"
 msgstr "Usa data corta"
 
-#: config_form.php:50
+#: config_form.php:36
 msgid "If checked, just the year (first 4 digits) will be considered for date similarity."
 msgstr "Se selezionata, solo l'anno (le prime 4 cifre) verrà considerato per la similarità per data."
 
-#: config_form.php:58
+#: config_form.php:44
+msgid "Show Item Title"
+msgstr "Mostra titolo documento"
+
+#: config_form.php:48
+msgid "If checked, a truncated title is displayed below each thumbnail."
+msgstr "Se selezionata, un titolo abbreviato verrà mostrato sotto ogni miniatura."
+
+#: config_form.php:56
+msgid "Exclude Items Without Image"
+msgstr "Escludi documenti senza immagine"
+
+#: config_form.php:60
+msgid "If checked, Items with no associated files will not be suggested."
+msgstr "Se selezionata, i documenti senza file associati non verranno suggeriti."
+
+#: config_form.php:68
 msgid "Criteria"
 msgstr "Criteri"
 
-#: config_form.php:62
-msgid
-"The search criterias's relative weights (if blank, criteria will not be considered) and constraint rule. "
-"See plugin's documentation for detailed instructions."
-msgstr 
-"I pesi relativi dei criteri di ricerca (se vuoto, il criterio non verrà considerato) e regole di vincolo. "
-"Vedere la documentazione del plugin per istruzioni dettagliate.
+#: config_form.php:72
+msgid "The search criteria's relative weights (if blank, criteria will not be considered) and constraint rule. See the <a href=\"%s\" target=\"_blank\">plugin's documentation</a> for detailed instructions."
+msgstr "I pesi relativi dei criteri di ricerca (se vuoto, il criterio non verrà considerato) e regole di vincolo. Vedere la <a href=\"%s\" target=\"_blank\">documentazione del plugin</a> per istruzioni dettagliate."
 
-#: config_form.php:67
+#: config_form.php:77
 msgid "Criterion"
 msgstr "Criterio"
 
-#: config_form.php:68
+#: config_form.php:78
+msgid "A positive number. Higher values increase the importance of this criterion. Leave blank to ignore it."
+msgstr "Un numero positivo. Valori più alti aumentano l'importanza del criterio. Lasciare vuoto per ignorarlo."
+
+#: config_form.php:78
 msgid "Weight"
 msgstr "Peso"
 
-#: config_form.php:69
+#: config_form.php:79
+msgid "If checked, only items matching this criterion will be suggested, regardless of other criteria."
+msgstr "Se selezionata, verranno suggeriti solo i documenti che corrispondono a questo criterio, indipendentemente dagli altri."
+
+#: config_form.php:79
 msgid "Constraint"
 msgstr "Vincolo"
 
-#: config_form.php:70
+#: config_form.php:80
+msgid "If checked, only the first 4 characters (the year) will be used for matching. Requires \"Use Short Date\" to be enabled above."
+msgstr "Se selezionata, solo i primi 4 caratteri (l'anno) verranno usati per la corrispondenza. Richiede che \"Usa data corta\" sia abilitata."
+
+#: config_form.php:80
 msgid "Is Date"
 msgstr "È data"
 
-#: config_form.php:119
+#: config_form.php:129
 msgid "Other criteria"
 msgstr "Altri criteri"
 
-#: config_form.php:123
+#: config_form.php:133
 msgid "Item Type"
 msgstr "Tipologia documento"
 
-#: config_form.php:153
+#: config_form.php:163
 msgid "Collection"
 msgstr "Collezione"
 
-#: config_form.php:183
+#: config_form.php:193
 msgid "Tags"
 msgstr "Etichette"

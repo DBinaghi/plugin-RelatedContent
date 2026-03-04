@@ -8,84 +8,111 @@ msgstr ""
 "Project-Id-Version: Locale\n"
 "Report-Msgid-Bugs-To: https://github.com/DBinaghi/plugin-RelatedContent/issues\n"
 "POT-Creation-Date: 2021-06-16 6:49-0100\n"
-"PO-Revision-Date: 2021-06-17 12:39-0100\n"
+"PO-Revision-Date: 2026-03-05 00:36+0100\n"
 "PO-Revision-Date: 2021-06-22 17:09-0100\n"
 "PO-Revision-Date: 2021-07-05 11:45-0100\n"
 "PO-Revision-Date: 2021-07-07 09:36-0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Daniele BINAGHI <admin@bitoteko.it>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: Daniele Binaghi\n"
+"Language-Team: \n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
 
-#: RelatedContentPlugin.php:162
+#: RelatedContentPlugin.php:322
 msgid "Related Items you might want to check out"
 msgstr "Rilatantaj eroj vi povus interesiĝi pri"
 
-#: config_form.php:22
+#: config_form.php:8
 msgid "Items Limit"
-msgstr ""
+msgstr "Limo de eroj"
 
-#: config_form.php:26
+#: config_form.php:12
 msgid "The maximum amount of related Items to be suggested."
-msgstr ""
+msgstr "La maksimuma nombro da rilatantaj eroj por sugesti."
 
-#: config_form.php:34
+#: config_form.php:20
 msgid "Use Square Thumbnails"
-msgstr ""
+msgstr "Uzi kvadratajn bildetojn"
 
-#: config_form.php:38
+#: config_form.php:24
 msgid "If checked, cropped square thumbnails are displayed."
-msgstr ""
+msgstr "Se elektita, montriĝos kvadrataj tonditaj bildetoj."
 
-#: config_form.php:46
+#: config_form.php:32
 msgid "Use Short Date"
-msgstr ""
+msgstr "Uzi mallongan daton"
 
-#: config_form.php:50
+#: config_form.php:36
 msgid "If checked, just the year (first 4 digits) will be considered for date similarity."
-msgstr ""
+msgstr "Se elektita, nur la jaro (la unuaj 4 ciferoj) estos konsiderata por dato-simileco."
 
-#: config_form.php:58
-msgid "Criteria"
-msgstr ""
+#: config_form.php:44
+msgid "Show Item Title"
+msgstr "Montri titolon de ero"
 
-#: config_form.php:62
-msgid
-"The search criterias's relative weights (if blank, criteria will not be considered) and constraint rule. "
-"See plugin's documentation for detailed instructions."
-msgstr ""
+#: config_form.php:48
+msgid "If checked, a truncated title is displayed below each thumbnail."
+msgstr "Se elektita, mallongigita titolo montriĝos sub ĉiu bildeto."
 
-#: config_form.php:67
-msgid "Criterion"
-msgstr ""
+#: config_form.php:56
+msgid "Exclude Items Without Image"
+msgstr "Ekskludi senbildajn erojn"
+
+#: config_form.php:60
+msgid "If checked, Items with no associated files will not be suggested."
+msgstr "Se elektita, eroj sen asociitaj dosieroj ne estos sugestataj."
 
 #: config_form.php:68
+msgid "Criteria"
+msgstr "Kriterioj"
+
+#: config_form.php:72
+msgid "The search criteria's relative weights (if blank, criteria will not be considered) and constraint rule. See the <a href=\"%s\" target=\"_blank\">plugin's documentation</a> for detailed instructions."
+msgstr "La relativaj pezoj de la serĉkriterioj (se malplena, la kriterio ne estos konsiderata) kaj limiga regulo. Vidu la <a href=\"%s\" target=\"_blank\">dokumentadon de la kromprogramo</a> por detalaj instrukcioj."
+
+#: config_form.php:77
+msgid "Criterion"
+msgstr "Kriterio"
+
+#: config_form.php:78
+msgid "A positive number. Higher values increase the importance of this criterion. Leave blank to ignore it."
+msgstr "Pozitiva nombro. Pli altaj valoroj pliigas la gravecon de ĉi tiu kriterio. Lasu malplena por ignori ĝin."
+
+#: config_form.php:78
 msgid "Weight"
-msgstr ""
+msgstr "Pezo"
 
-#: config_form.php:69
+#: config_form.php:79
+msgid "If checked, only items matching this criterion will be suggested, regardless of other criteria."
+msgstr "Se elektita, nur eroj kongruantaj kun ĉi tiu kriterio estos sugestataj, sendepende de aliaj kriterioj."
+
+#: config_form.php:79
 msgid "Constraint"
-msgstr ""
+msgstr "Limo"
 
-#: config_form.php:70
+#: config_form.php:80
+msgid "If checked, only the first 4 characters (the year) will be used for matching. Requires \"Use Short Date\" to be enabled above."
+msgstr "Se elektita, nur la unuaj 4 signoj (la jaro) estos uzataj por kongruo. Postulas ke \"Uzi mallongan daton\" estu ebligita supre."
+
+#: config_form.php:80
 msgid "Is Date"
-msgstr ""
+msgstr "Estas dato"
 
-#: config_form.php:119
+#: config_form.php:129
 msgid "Other criteria"
-msgstr ""
+msgstr "Aliaj kriterioj"
 
-#: config_form.php:123
+#: config_form.php:133
 msgid "Item Type"
-msgstr ""
+msgstr "Tipo de ero"
 
-#: config_form.php:153
+#: config_form.php:163
 msgid "Collection"
-msgstr ""
+msgstr "Kolekto"
 
-#: config_form.php:183
+#: config_form.php:193
 msgid "Tags"
-msgstr ""
+msgstr "Etikedoj"
