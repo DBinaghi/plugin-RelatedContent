@@ -10,3 +10,7 @@
 #related_content .image {
 	margin: 5px;
 }
+
+.show-titles a {
+	margin-bottom: 1.5em;
+}
