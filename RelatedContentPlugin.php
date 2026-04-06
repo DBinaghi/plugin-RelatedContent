@@ -218,31 +218,31 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 		
 		// Elements
 		if (isset($criteria['elements']) && is_array($criteria['elements'])) {
-		foreach ($criteria['elements'] as $key => $value) {
-			if (isset($value['weight']) && $weight = $value['weight']) {
-				$element = self::findElementById($key);
-				if ($metadata = metadata($item, array($element->set_name, $element->name), array('all' => true, 'no_filter' => true))) {
-					//shorten date, if required
-					if (isset($value['isDate']) && (bool)$value['isDate'] && (bool)get_option('related_content_short_date')) {
-						$metadata = array_map(function($m) { return substr($m, 0, 4); }, $metadata);
-						// retrieve results using date-specific method (LIKE match)
-						$results_element = self::getResultsByDateElement($key, $metadata, $weight);
-					} else {
-						// retrieve results
-						$results_element = self::getResultsByElement($key, $metadata, $weight);
-					}
+			foreach ($criteria['elements'] as $key => $value) {
+				if (isset($value['weight']) && $weight = $value['weight']) {
+					$element = self::findElementById($key);
+					if ($metadata = metadata($item, array($element->set_name, $element->name), array('all' => true, 'no_filter' => true))) {
+						//shorten date, if required
+						if (isset($value['isDate']) && (bool)$value['isDate'] && (bool)get_option('related_content_short_date')) {
+							$metadata = array_map(function($m) { return substr($m, 0, 4); }, $metadata);
+							// retrieve results using date-specific method (LIKE match)
+							$results_element = self::getResultsByDateElement($key, $metadata, $weight);
+						} else {
+							// retrieve results
+							$results_element = self::getResultsByElement($key, $metadata, $weight);
+						}
 
-					// filter constraints array if needed
-					if (isset($value['constraint']) && (bool)$value['constraint']) {
-						$constraints =  self::updateConstraints($constraints, array_keys($results_element));
+						// filter constraints array if needed
+						if (isset($value['constraint']) && (bool)$value['constraint']) {
+							$constraints =  self::updateConstraints($constraints, array_keys($results_element));
+						}
+						
+						// adds values to $results
+						$results = self::addAndMergeArrays($results, $results_element);
 					}
-					
-					// adds values to $results
-					$results = self::addAndMergeArrays($results, $results_element);
 				}
 			}
 		}
-		} // end isset criteria elements
 		
 		// Tags
 		if (($weight = $criteria['tags']['weight']) && metadata($item, 'has tags')) {
@@ -320,7 +320,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 			// displays thumbnails
 			echo "<div id='related_content'" . ($showTitle ? " class='show-title'" : "") . ">\n";
 			echo "<h3><strong>" . __('Related Items you might want to check out') . "...</strong></h3>";
-			echo "<div class='related-items'>\n";
+			echo "<div class='related-items" . ($showTitle ? ' show-titles' : '') . "'>\n";
 
 			$i = 1;
 			foreach ($sorted as $key => $value) {
@@ -336,7 +336,7 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 
 				$content = item_image($thumbnailType, array('alt' => $title), 0, $item);
 				if ($showTitle) {
-					$content .= '<span class="related-title">' . html_escape($truncatedTitle) . '</span>';
+					$content .= '<div class="related-title">' . html_escape($truncatedTitle) . '</div>';
 				}
 
 				echo link_to_item($content, array('class' => 'image', 'title' => $title), 'show', $item);
