@@ -147,8 +147,8 @@ class RelatedContentPlugin extends Omeka_Plugin_AbstractPlugin
 
 		set_option('related_content_square_thumbnails', $post['related_content_square_thumbnails']);
 		set_option('related_content_short_date', $post['related_content_short_date']);
-		set_option('related_content_show_title', isset($post['related_content_show_title']) ? 1 : 0);
-		set_option('related_content_exclude_no_image', isset($post['related_content_exclude_no_image']) ? 1 : 0);
+		set_option('related_content_show_title', $post['related_content_show_title']);
+		set_option('related_content_exclude_no_image', $post['related_content_exclude_no_image']);
 
 		// Validate weights: must be numeric and positive, or empty
 		$criteria = isset($post['criteria']) ? $post['criteria'] : array();
